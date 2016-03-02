@@ -6,8 +6,6 @@
 // export NODE_PATH=/usr/lib/node_modules/
 // screen node scoreboard.js
 
-// https://github.com/caolan/async
-
 var http = require('http');
 var r = require("./retrieve");
 var childProcess = require("child_process");
@@ -26,20 +24,8 @@ var Team = function(name, ip)
     return that;
 };
 
-// We can use internal IPs since we are within a VPC
-//./start-instances.php -a GENHOSTS -r us-west-1 -p BIGC | awk 'BEGIN{team=1}{print "teams.push(Team(\"" team++ "\", \""$1"\"));"}'
-
 teams = Array();
-teams.push(Team("1", ""));
-teams.push(Team("1", ""));
-teams.push(Team("1", ""));
-teams.push(Team("1", ""));
-teams.push(Team("1", ""));
-teams.push(Team("1", ""));
-teams.push(Team("1", ""));
-teams.push(Team("1", ""));
-teams.push(Team("1", ""));
-teams.push(Team("1", ""));
+// Add Team definiton here. Use: ./start-instances.php -r us-west-1 -p BFG -a GENSCOREBOARD
 
 var init = function() {
     
@@ -93,13 +79,13 @@ http.createServer(function (request, response)
 </head> \n\
 <body> \n\
 <table width=100%> \n\
-<tr><th>Team name</th><th>Homepage (Goal: <200ms)</th><th>Search Results (Goal: < 1000ms)</th><th>Any other page (Goal: <500ms)</tr> \n\
+<tr><th>Team name</th><th>Homepage (Goal: <200ms)</th><th>Search Results (Goal: < 1000ms)</th><th>Movie page (Goal: <500ms)</tr> \n\
 ';
     
     for(var i = 0; i < teams.length; i++)
     {
         var team = teams[i];
-        output += "<tr><th>Team " + team.name + "</th>";
+        output += "<tr><th>Team " + team.name + "<br/>" + team.ip + "</th>";
         output += "<td align=center>" + utils.pretty_time( team.homepageResult ) + " " + utils.print_bar( team.homepageResult, 200 ) + "</td>";
         output += "<td align=center>" + utils.pretty_time( team.searchResult ) + " " + utils.print_bar( team.searchResult, 1000 ) + "</td>";
         output += "<td align=center>" + utils.pretty_time( team.movieResult ) + " " + utils.print_bar( team.movieResult, 500 ) + "</td>";

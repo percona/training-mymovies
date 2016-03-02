@@ -105,5 +105,5 @@ process.on('message', function(teams)
 
 process.on('uncaughtException', function(err)
 {
-    console.log("retriever.js: " + err.message + "\n" + err.stack + "\n");
+    console.log("retrieve.js: " + err.message + "\n" + err.stack + "\n");
 })

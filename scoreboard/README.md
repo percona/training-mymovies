@@ -1,15 +1,21 @@
 ## MyMovies Scoreboard
 
-To install:
-- service httpd stop (assuming you have apache installed)
-- yum install epel-release -y
-- yum install nodejs npm -y
-
-Edit scoreboard.js and update the Team IP addresses. In AWS, you can use the internal IPs of the student hosts.
-
-To start:
- - export NODE_PATH=/usr/lib/node_modules/
- - screen node scoreboard.js
+1. Install NodeJS and Plugins
+ - `yum install epel-release -y`
+ - `yum install nodejs npm -y`
+2. Clone Repo
+ - `git clone https://github.com/percona/training-material`
+ - You will have to login with github.com credentials since this is a private repo.
+ - After cloning, `cd training-material/scoreboard`
+2. Edit Config
+ - Edit scoreboard.js and update the Team IP address object. In AWS, you can use the internal IPs of the student hosts.
+ - `./start-instances.php -r us-west-1 -p BFG -a GENSCOREBOARD`
+3. Start scoreboard
+ - Run the following:
+ - `export NODE_PATH=/usr/lib/node_modules/`
+ - `screen node scoreboard.js`
+4. Load scoreboard
+ - Load up in a browser: `http://ip.of.your.machine:8080/`
 
 ## How it works
 
