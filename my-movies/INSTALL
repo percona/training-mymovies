@@ -1,0 +1,28 @@
+=== Movie Sample Data ===
+
+This application relies on sample data provided by IMDB, which is
+released under a license with restricts redistribution.
+
+You can install the sample data using the steps described on this
+website:
+
+  http://imdbpy.sourceforge.net/
+
+
+=== Additional Social Features ===
+
+Once IMDB data is installed, there are a couple of additional tables
+which need to be created.  You can import a dump file from:
+
+  ./lib/install.sql
+
+This does not include fake users.  You can import these names from another file (under the GPL v3 license):
+
+ ./lib/fakenames.sql
+
+=== Configuration File ===
+
+There are only a few settings to modify, and they should mostly make sense.
+See:
+
+ ./lib/config.inc.php.

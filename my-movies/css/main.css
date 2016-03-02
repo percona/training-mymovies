@@ -1,0 +1,63 @@
+body {
+	font-family: Arial;
+	background-color: #bbbbbb;
+	margin-left: 20px;
+	margin-top: 20px;
+}
+
+h1 {
+	font-size: 32px;
+	padding-bottom: 20px;
+}
+
+h2 {
+	font-size: 24px;
+	padding-bottom: 10px;
+}
+
+h3 {
+	font-size: 18px;
+	padding-bottom: 10px;
+}
+
+p {
+}
+
+a {
+	color: #ff0000;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #990000;
+}
+
+#main {
+ clear: both;
+ width: 750px;
+ background: #ffffff;
+ padding: 30px;
+}
+
+#search {
+ float: right;
+}
+
+#login {
+ width: 750px;
+ float: right;
+}
+
+#credits div, #cast div {
+	border-bottom: 1px dashed #cccccc;
+	margin-top: 3px;
+}
+
+.box {
+ border: 1px solid #bbbbbb;
+ float: left;
+ width: 335px;
+ padding: 10px;
+ margin-right: 10px;
+ margin-bottom: 10px;
+}
