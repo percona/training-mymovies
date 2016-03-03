@@ -25,4 +25,4 @@ This does not include fake users.  You can import these names from another file 
 There are only a few settings to modify, and they should mostly make sense.
 See:
 
- ./lib/config.inc.php.
+ ./lib/config.inc.php
