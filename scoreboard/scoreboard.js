@@ -1,6 +1,6 @@
 // To Install:
 // yum install epel-release -y
-// yum install nodejs npm -y
+// yum install nodejs nodejs-async nodejs-child-process-close -y
 
 // To start:
 // export NODE_PATH=/usr/lib/node_modules/
@@ -10,6 +10,7 @@ var http = require('http');
 var r = require("./retrieve");
 var childProcess = require("child_process");
 var utils = require("./utils");
+var fs = require("fs");
 
 // Team object
 var Team = function(name, ip)
@@ -25,8 +26,14 @@ var Team = function(name, ip)
 };
 
 teams = Array();
-// Add Team definiton here. Use: ./start-instances.php -r us-west-1 -p BFG -a GENSCOREBOARD
 
+// Load the JSON file and add the teams to our array for processing
+var tmpteams = JSON.parse(fs.readFileSync("teams.json"));
+for (var k in tmpteams) {
+  teams.push(new Team(k, tmpteams[k]));
+}
+
+// Enter here
 var init = function() {
     
     console.log("scoreboard.js: initialization starting");
