@@ -1,15 +1,19 @@
-## MyMovies Scoreboard
+# MyMovies Scoreboard
+
+## Ansible-based Install
+
+1. Use ansible script from percona/training-material to deploy
+ - `ansible-playbook -i ansible_hosts_hou -l db1-T10 ansible_playbooks/scoreboard.yml`
+
+## Manual Install
 
 1. Install NodeJS and Plugins
  - `yum install epel-release -y`
- - `yum install nodejs npm -y`
+ - `yum install nodejs nodejs-async nodejs-child-process-close -y`
 2. Clone Repo
- - `git clone https://github.com/percona/training-material`
- - You will have to login with github.com credentials since this is a private repo.
- - After cloning, `cd training-material/scoreboard`
-2. Edit Config
- - Edit scoreboard.js and update the Team IP address object. In AWS, you can use the internal IPs of the student hosts.
- - `./start-instances.php -r us-west-1 -p BFG -a GENSCOREBOARD`
+ - `git clone https://github.com/percona/training-mymovies`
+ - After cloning, `cd training-mymovies/scoreboard`
+ - Edit/Create teams.json
 3. Start scoreboard
  - Run the following:
  - `export NODE_PATH=/usr/lib/node_modules/`
