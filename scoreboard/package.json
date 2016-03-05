@@ -1,0 +1,14 @@
+{
+  "name": "scoreboard",
+  "version": "1.0.0",
+  "main": "scoreboard.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matthew Boehm <matthew.boehm@percona.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.13.4",
+    "hbs": "^4.0.0"
+  }
+}
