@@ -1,15 +1,10 @@
-// To Install:
-// yum install epel-release -y
-// yum install nodejs nodejs-async nodejs-child-process-close -y
+var app = require('express')();
+var http = require('http').Server(app);
+var hbs = require('hbs');
+var serveStatic = require('serve-static');
 
-// To start:
-// export NODE_PATH=/usr/lib/node_modules/
-// screen node scoreboard.js
-
-var http = require('http');
-var r = require("./retrieve");
 var childProcess = require("child_process");
-var utils = require("./utils");
+var utils = require("./lib/utils");
 var fs = require("fs");
 
 // Team object
@@ -25,9 +20,8 @@ var Team = function(name, ip)
     return that;
 };
 
-teams = Array();
-
 // Load the JSON file and add the teams to our array for processing
+teams = Array();
 var tmpteams = JSON.parse(fs.readFileSync("teams.json"));
 for (var k in tmpteams) {
   teams.push(new Team(k, tmpteams[k]));
@@ -39,7 +33,7 @@ var init = function() {
     console.log("scoreboard.js: initialization starting");
     
     // Create the background process
-    this._rchild = childProcess.fork("./retrieve");
+    this._rchild = childProcess.fork("./lib/retrieve");
     
     // Listen for messages sent from background process
     this._rchild.on('message', function(data) {
@@ -56,57 +50,51 @@ var init = function() {
     this._rchild.send(teams);
 }()
 
-http.createServer(function (request, response)
-{
+app.set('view engine', 'html');
+app.set('views', './views')
+
+app.engine('html', require('hbs').__express);
+
+hbs.registerHelper('prettyTime', function(t) {
+	return utils.pretty_time(t);
+});
+
+hbs.registerHelper('printBar', function(time, goal) {
+	
+	console.log("Time: " + time + "   Goal: " + goal);
+	
+	html = '<div class="progress">';
+	
+	max = 5000;
+	
+	if (time > max) {
+		pct = 100
+		html += '<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="' + time + '" aria-valuemin="0" aria-valuemax="' + time + '" style="width: ' + pct + '%"><span class="sr-only">Nope</span></div></div>';
+	}
+	else if (time > goal) {
+		pct = Math.round((time / max) * 100, 0);
+		html += '<div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="' + time + '" aria-valuemin="0" aria-valuemax="' + goal + '" style="width: ' + pct + '%"><span class="sr-only">Nope</span></div></div>';
+	} else {
+		pct = Math.round((time / max) * 100, 0);
+		html += '<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="' + time + '" aria-valuemin="0" aria-valuemax="' + goal + '" style="width: ' + pct + '%"><span class="sr-only">Nope</span></div></div>';
+	}
+	
+	return html;
+});
+
+app.use(serveStatic(__dirname + '/static'));
+
+app.get('/', function (req, res) {
+	
     var start = new Date();
     
-    output = '<html> \n\
- <head> \n\
- <title>Scoreboard</title> \n\
- <style> \n\
- \n\
- body { \n\
-        font-family: arial; \n\
- } \n\
- \n\
- #homepage, #search, #other { \n\
-  width: 10%; \n\
-  border: 1px solid #cccccc; \n\
-  float: left; \n\
-  padding: 10px; \n\
-  margin-left: 5px; \n\
- } \n\
- \n\
- #refreshing { \n\
-  float: right; \n\
-  font-style: italic; \n\
- } \n\
- </style> \n\
- <meta http-equiv="refresh" content="60"> \n\
-</head> \n\
-<body> \n\
-<table width=100%> \n\
-<tr><th>Team name</th><th>Homepage (Goal: <200ms)</th><th>Search Results (Goal: < 1000ms)</th><th>Movie page (Goal: <500ms)</tr> \n\
-';
+	res.render('index', {
+		theteams: teams,
+		date: start
+	});
     
-    for(var i = 0; i < teams.length; i++)
-    {
-        var team = teams[i];
-        output += "<tr><th>Team " + team.name + "<br/>" + team.ip + "</th>";
-        output += "<td align=center>" + utils.pretty_time( team.homepageResult ) + " " + utils.print_bar( team.homepageResult, 200 ) + "</td>";
-        output += "<td align=center>" + utils.pretty_time( team.searchResult ) + " " + utils.print_bar( team.searchResult, 1000 ) + "</td>";
-        output += "<td align=center>" + utils.pretty_time( team.movieResult ) + " " + utils.print_bar( team.movieResult, 500 ) + "</td>";
-        output += "</tr>\n";
-    }
-    
-    output += "</table>\n";
-    output += "Page built in " + utils.pretty_time( new Date() - start ) + "<br/>";
-    output += "Page last updated at" + Date() + "\n";
-    output += "</body></html>";
-        
-    response.writeHead(200, {'Content-Type': 'text/html'});
-    response.end(output + '\n');
-    
-}).listen(8080);
+})
 
-console.log('Server running at http://127.0.0.1:8080/');;
+app.listen(8080, function () {
+	console.log("Scoreboard running on :8080");
+});
