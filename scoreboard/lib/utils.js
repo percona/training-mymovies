@@ -1,3 +1,5 @@
+exports.util = require('util');
+
 exports.genRandString = function() {
 
     var length = 20;
