@@ -1,0 +1,40 @@
+<html>
+  <head>
+  <title>Scoreboard</title>
+  <link href="/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link href="/css/bootstrap/bootstrap-theme.min.css" rel="stylesheet">
+  <style>
+  
+  </style>
+  <meta http-equiv="refresh" content="60">
+  </head>
+  <body role="document">
+    <table class="table table-striped">
+	  <thead>
+		<tr>
+		  <th>Team name</th>
+		  <th>Homepage (Goal: <200ms)</th>
+		  <th>Search Results (Goal: < 1000ms)</th>
+		  <th>Movie page (Goal: <500ms)</th>
+		</tr>
+	  </thead>
+	  <tbody>
+	    {{#each theteams}}
+        <tr>
+          <td>Team {{ name }}<br/>{{ ip }}</td>
+          <td>{{ prettyTime homepageResult }} {{{ printBar homepageResult 300 }}}</td>
+          <td>{{ prettyTime searchResult }} {{{ printBar searchResult 9000 }}}</td>
+          <td>{{ prettyTime movieResult }} {{{ printBar movieResult 31000 }}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">Page last updated at {{ date }}.</p>
+      </div>
+    </footer>
+    
+  </body>
+ </html>
