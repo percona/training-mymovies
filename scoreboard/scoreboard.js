@@ -1,7 +1,8 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
+
 var http = require('http').Server(app);
 var hbs = require('hbs');
-var serveStatic = require('serve-static');
 
 var childProcess = require("child_process");
 var utils = require("./lib/utils");
@@ -67,27 +68,29 @@ hbs.registerHelper('prettyTime', function(t) {
 // This template helper prints a nice progress bar
 hbs.registerHelper('printBar', function(time, goal) {
 	
-	html = '<div class="progress">';
-	
 	max = 5000;
+	template = '<div class="progress"><div class="progress-bar progress-bar-%s" role="progressbar" aria-valuenow="%d" aria-valuemin="0" aria-valuemax="%d" style="width: %d%%;"><span class="sr-only">Nope</span></div></div>';
 	
-	if (time >= max) {
+	if (time >= max)
+	{
 		pct = 100
-		html += '<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="' + time + '" aria-valuemin="0" aria-valuemax="' + time + '" style="width: ' + pct + '%"><span class="sr-only">Nope</span></div></div>';
+		html = utils.util.format(template, 'danger', time, time, pct);
 	}
-	else if (time > goal) {
+	else
+	{
 		pct = Math.round((time / max) * 100, 0);
-		html += '<div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="' + time + '" aria-valuemin="0" aria-valuemax="' + goal + '" style="width: ' + pct + '%"><span class="sr-only">Nope</span></div></div>';
-	} else {
-		pct = Math.round((time / max) * 100, 0);
-		html += '<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="' + time + '" aria-valuemin="0" aria-valuemax="' + goal + '" style="width: ' + pct + '%"><span class="sr-only">Nope</span></div></div>';
+		
+		if (time > goal)
+			html = utils.util.format(template, 'warning', time, time, pct);
+		else
+			html = utils.util.format(template, 'success', time, time, pct);
 	}
 	
 	return html;
 });
 
 // Just serve this static content (js, css)
-app.use(serveStatic(__dirname + '/static'));
+app.use(express.static(__dirname + '/static'));
 
 // There's only 1 route here
 app.get('/', function (req, res) {

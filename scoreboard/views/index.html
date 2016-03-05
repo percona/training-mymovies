@@ -1,26 +1,31 @@
 <html>
   <head>
-  <title>Scoreboard</title>
+  <title>MyMovies Scoreboard</title>
   <link href="/css/bootstrap/bootstrap-3.3.6.min.css" rel="stylesheet">
   <link href="/css/bootstrap/bootstrap-theme-3.3.6.min.css" rel="stylesheet">
-  <style>
-  
-  </style>
+  <link href="/css/scoreboard.css" rel="stylesheet">
   <meta http-equiv="refresh" content="60">
   </head>
   <body role="document">
+    
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header navbar-brand">MyMovies Scoreboard</div>
+      </div>
+    </nav>
+    
     <div class="col-md-12">
     <table class="table table-striped">
-	  <thead>
-		<tr>
-		  <th class="col-md-1">Team name</th>
-		  <th class="col-md-3">Homepage (Goal: <200ms)</th>
-		  <th class="col-md-3">Search Results (Goal: < 1000ms)</th>
-		  <th class="col-md-3">Movie page (Goal: <500ms)</th>
-		</tr>
-	  </thead>
-	  <tbody>
-	    {{#each theteams}}
+      <thead>
+        <tr>
+          <th class="col-md-1">Team name</th>
+          <th class="col-md-3">Homepage (Goal: <200ms)</th>
+          <th class="col-md-3">Search Results (Goal: < 1000ms)</th>
+          <th class="col-md-3">Movie page (Goal: <500ms)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each theteams}}
         <tr>
           <td>Team {{ name }}<br/>{{ ip }}</td>
           <td>{{ prettyTime homepageResult }} {{{ printBar homepageResult 200 }}}</td>
