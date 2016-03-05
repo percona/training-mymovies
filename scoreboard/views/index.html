@@ -1,8 +1,8 @@
 <html>
   <head>
   <title>Scoreboard</title>
-  <link href="/css/bootstrap/bootstrap.min.css" rel="stylesheet">
-  <link href="/css/bootstrap/bootstrap-theme.min.css" rel="stylesheet">
+  <link href="/css/bootstrap/bootstrap-3.3.6.min.css" rel="stylesheet">
+  <link href="/css/bootstrap/bootstrap-theme-3.3.6.min.css" rel="stylesheet">
   <style>
   
   </style>
@@ -22,9 +22,9 @@
 	    {{#each theteams}}
         <tr>
           <td>Team {{ name }}<br/>{{ ip }}</td>
-          <td>{{ prettyTime homepageResult }} {{{ printBar homepageResult 300 }}}</td>
-          <td>{{ prettyTime searchResult }} {{{ printBar searchResult 9000 }}}</td>
-          <td>{{ prettyTime movieResult }} {{{ printBar movieResult 31000 }}}</td>
+          <td>{{ prettyTime homepageResult }} {{{ printBar homepageResult 200 }}}</td>
+          <td>{{ prettyTime searchResult }} {{{ printBar searchResult 1000 }}}</td>
+          <td>{{ prettyTime movieResult }} {{{ printBar movieResult 500 }}}</td>
         </tr>
         {{/each}}
       </tbody>
