@@ -37,11 +37,13 @@ exports.print_bar = function(time, goal) {
     
     if( time > goal * 2 )
     {
+    	// red - FF3333
         w = goal * 2;
         color = "#FF3333";
     }
     else if( time > goal )
     {
+    	// yellow - FFFF33
         color = "#FFFF33";
     }
 
