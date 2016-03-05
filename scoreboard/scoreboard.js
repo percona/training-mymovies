@@ -50,24 +50,28 @@ var init = function() {
     this._rchild.send(teams);
 }()
 
+// Our view engine should look for .html files
+// inside the ./views directory
 app.set('view engine', 'html');
 app.set('views', './views')
 
+// Tell express's engine to use Handlebar
+// to render templates
 app.engine('html', require('hbs').__express);
 
+// This template helper calls utility function
 hbs.registerHelper('prettyTime', function(t) {
 	return utils.pretty_time(t);
 });
 
+// This template helper prints a nice progress bar
 hbs.registerHelper('printBar', function(time, goal) {
-	
-	console.log("Time: " + time + "   Goal: " + goal);
 	
 	html = '<div class="progress">';
 	
 	max = 5000;
 	
-	if (time > max) {
+	if (time >= max) {
 		pct = 100
 		html += '<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="' + time + '" aria-valuemin="0" aria-valuemax="' + time + '" style="width: ' + pct + '%"><span class="sr-only">Nope</span></div></div>';
 	}
@@ -82,8 +86,10 @@ hbs.registerHelper('printBar', function(time, goal) {
 	return html;
 });
 
+// Just serve this static content (js, css)
 app.use(serveStatic(__dirname + '/static'));
 
+// There's only 1 route here
 app.get('/', function (req, res) {
 	
     var start = new Date();
@@ -95,6 +101,7 @@ app.get('/', function (req, res) {
     
 })
 
+// Start the server
 app.listen(8080, function () {
-	console.log("Scoreboard running on :8080");
+	console.log("scoreboard.js: Running on :8080");
 });

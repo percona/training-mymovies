@@ -27,34 +27,3 @@ exports.pretty_time = function(ms) {
         return seconds.toFixed(2) + 's';
     }
 };
-
-exports.print_bar = function(time, goal) {
-
-    var output = '';
-    var color = "#33FF33";
-    var tablewidth = 250;
-    var w = time;
-    
-    if( time > goal * 2 )
-    {
-    	// red - FF3333
-        w = goal * 2;
-        color = "#FF3333";
-    }
-    else if( time > goal )
-    {
-    	// yellow - FFFF33
-        color = "#FFFF33";
-    }
-
-    var w = Math.round( w * tablewidth / ( goal * 2));
-    var v = tablewidth - w;
-    return " \
-<table border=1 cellpadding=0 cellspacing=0 width='" + tablewidth + "'> \
-<tr> \
-<td width='" + w + "' style='background-color:" + color + "'>&nbsp;</td> \
-<td width='" + v + "'>&nbsp;</td> \
-</tr> \
-</table> \
-";
-};

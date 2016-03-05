@@ -8,7 +8,7 @@ process.on('message', function(teams)
     {
         var resultData = { "name":_team.name, "homepageResult":0, "searchResult":0, "movieResult":0 };
         
-        console.log("Begin Parallel Processing for team " + _team.name);
+        console.log("retrieve.js: Begin processing for team " + _team.name);
         
         // Do all the page loading
         async.parallel([
@@ -63,7 +63,7 @@ process.on('message', function(teams)
             // results is now equal to ['homepage', 'searchpage', 'moviepage']
             // on success of each function in the series
             
-            console.log("Results processing done for team " + _team.name);
+            console.log("retrieve.js: Results processing done for team " + _team.name);
             
             // Let the parent know something changed
             process.send(resultData);
@@ -77,11 +77,11 @@ process.on('message', function(teams)
     {
         if(err)
         {
-            console.log("async.each() : Got error: " + err);
+            console.log("retrieve.js: async.each() : Got error: " + err);
         }
         else
         {
-            console.log("async.each() : Completed iteration.");
+            console.log("retrieve.js: async.each() : Completed iteration.");
         }
     }
     
