@@ -3,23 +3,33 @@
 ## Ansible-based Install
 
 1. Use ansible script from percona/training-material to deploy
- - `ansible-playbook -i ansible_hosts_hou -l db1-T10 ansible_playbooks/scoreboard.yml`
+`ansible-playbook -i ansible_hosts_hou -l db1-T10 ansible_playbooks/scoreboard.yml`
 
 ## Manual Install
 
 1. Install NodeJS and Plugins
  - `yum install epel-release -y`
- - `yum install nodejs nodejs-async nodejs-child-process-close -y`
+ - `yum install nodejs npm git -y`
 2. Clone Repo
  - `git clone https://github.com/percona/training-mymovies`
  - After cloning, `cd training-mymovies/scoreboard`
- - Edit/Create teams.json
-3. Start scoreboard
- - Run the following:
- - `export NODE_PATH=/usr/lib/node_modules/`
- - `screen node scoreboard.js`
-4. Load scoreboard
- - Load up in a browser: `http://ip.of.your.machine:8080/`
+ - Edit/Create **teams.json** Example:
+
+     ```
+     {
+           "1":"127.0.0.1",
+           "2":"127.0.0.1",
+           "3":"127.0.0.1",
+           "4":"127.0.0.1"
+     }
+     ```
+
+3. Install required NPM modules  
+    `npm install`
+3. Start scoreboard  
+    `screen node scoreboard.js`
+4. Load scoreboard in a browser:  
+    `http://ip.of.instance:8080/`
 
 ## How it works
 
