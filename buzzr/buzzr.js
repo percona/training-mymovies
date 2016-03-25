@@ -1,8 +1,13 @@
 var express = require('express');
 var app = express();
+
+var bodyParser = require('body-parser');
 var debug = require('debug')('buzzr:server');
 var logger = require('morgan');
-var cookieParser = require('cookie-parser');
+
+var session = require('express-session');
+var FileStore = require('session-file-store')(session);
+
 var routes = require('./routes');
 
 // Get the port and start 'er up
@@ -22,10 +27,24 @@ app.set('view engine', 'hbs');
 app.use(logger('tiny'));
 
 // Parse cookies
-app.use(cookieParser());
+app.use(session({
+	name: 'server-session-cookie-id',
+	secret: 'my secret',
+	saveUninitialized: true,
+	resave: true,
+	store: new FileStore()
+}));
+
+app.use(function printSession(req, res, next) {
+	console.log('req.session', req.session);
+	return next();
+});
 
 // Static Content (js, css, imgs)
 app.use(express.static(__dirname + '/public'));
+
+// Parse body responses
+app.use(bodyParser());
 
 // Routes
 app.use(routes);

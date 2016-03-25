@@ -6,13 +6,14 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Buzzr' });
 });
 
-/* GET users listing. */
-router.get('/users', function(req, res, next) {
+// Students logic
+router.get('/student', function(req, res, next) {
+  
+  // Check for session cookie
+  
+  
+  
   res.render('chat');
-});
-
-router.get('/users/foo', function(req, res, next) {
-  res.render('chat', { title: 'Chat Foo' });
 });
 
 module.exports = router;
