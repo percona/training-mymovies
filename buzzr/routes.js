@@ -10,10 +10,12 @@ router.get('/', function(req, res, next) {
 router.get('/student', function(req, res, next) {
   
   // Check for session cookie
+  if (typeof req.session.views === 'undefined') {
+  	req.session.views = 0;
+  }
   
-  
-  
-  res.render('chat');
+  req.session.views++;
+  res.render('chat', {views: req.session.views});
 });
 
 module.exports = router;

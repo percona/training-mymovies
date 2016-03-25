@@ -35,11 +35,6 @@ app.use(session({
 	store: new FileStore()
 }));
 
-app.use(function printSession(req, res, next) {
-	console.log('req.session', req.session);
-	return next();
-});
-
 // Static Content (js, css, imgs)
 app.use(express.static(__dirname + '/public'));
 
