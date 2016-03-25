@@ -1,0 +1,26 @@
+{
+  "name": "buzzr",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Buzzr is a notification/buzzer web-app for Percona training classrooms.",
+  "scripts": {
+    "start": "node buzzr"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/percona/training-mymovies.git"
+  },
+  "author": "Matthew Boehm <matthew.boehm@percona.com>",
+  "bugs": {
+    "url": "https://github.com/percona/training-mymovies/issues"
+  },
+  "homepage": "https://github.com/percona/training-mymovies#readme",
+  "dependencies": {
+    "cookie-parser": "~1.3.5",
+    "debug": "~2.2.0",
+    "express": "~4.13.4",
+    "hbs": "~4.0.0",
+    "morgan": "~1.6.1",
+    "socket.io": "^1.4.5"
+  }
+}
