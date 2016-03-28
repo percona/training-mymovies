@@ -25,11 +25,13 @@
             crossorigin="anonymous"></script>
     <script>
       var socket = io('/buzzur');
-      var studentid = '{{studentid}}';
+      var attendeeid = '{{attendeeid}}';
+      var firstName = '{{firstName}}';
+      var lastInitial = '{{lastInitial}}';
       
       function sendStatus(s)
       {
-        socket.emit('task-status', { studentid: studentid, status: s });
+        socket.emit('task-status', { attendeeid: attendeeid, status: s });
         return false;
       }
       
@@ -44,30 +46,39 @@
       
       $('#completed-task').click(function(e){
         clearAndSet('alert-success');
-        sendStatus('completed-task');
+        sendStatus('alert-success');
       });
       
       $('#just-a-min').click(function(e){
         clearAndSet('alert-warning');
-        sendStatus('just-a-min');
+        sendStatus('alert-warning');
       });
       
       $('#ack-help').click(function(e){
         clearAndSet('alert-danger');
-        sendStatus('ack-help');
+        sendStatus('alert-danger');
       });
       
       socket.on('new-task', function(msg) {
         clearAndSet();
         $('#current-task').html(msg.task_text);
         $('#tasks').show();
-        $('#taskbuttons').show();
+        $('#task-buttons').show();
       });
       
       socket.on('clear-task', function(m) {
-        $('#taskbuttons').hide();
+        $('#task-buttons').hide();
         clearAndSet();
         $('#current-task').html('No Task at This Time.');
+      });
+      
+      // Announce we've connected to the room
+      socket.on('connect', function() {
+      	socket.emit('attendee-joined', {
+      		attendeeid: attendeeid,
+      		firstName: firstName,
+      		lastInitial: lastInitial
+      	});
       });
       
       $(window).bind('beforeunload', function(e) {

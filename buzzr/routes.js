@@ -11,7 +11,7 @@ module.exports = function(app, passport) {
 	app.get('/student', function(req, res, next) {
 		
 		// Check for session cookie
-		if (typeof req.session.studentid === 'undefined') {
+		if (typeof req.session.attendeeid === 'undefined') {
 			return res.redirect('/student/login');
 		}
 		
@@ -19,7 +19,7 @@ module.exports = function(app, passport) {
 		res.render('student_chat', {
 			firstName: req.session.firstName,
 			lastInitial: req.session.lastInitial,
-			studentid: req.session.studentid
+			attendeeid: req.session.attendeeid
 		});
 		
 	});
@@ -62,7 +62,7 @@ module.exports = function(app, passport) {
 			req.session.firstName = req.body.firstName1;
 			req.session.lastInitial = req.body.lastInitial1;
 			req.session.email = (req.body.email1 || "anon@anon.org");
-			req.session.studentid = (req.body.firstName1.toUpperCase()
+			req.session.attendeeid = (req.body.firstName1.toUpperCase()
 									+ req.body.lastInitial1.toUpperCase()
 									+ (Math.floor(Date.now() / 1000)));
 			

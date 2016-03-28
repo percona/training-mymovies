@@ -68,3 +68,12 @@ body {
 .tcenter {
   text-align: center;
 }
+
+#attendees-list > .alert {
+  padding: 2px;
+  margin-bottom: 8px;
+}
+
+#attendees-list > .alert > .glyphicon {
+  padding-right: 10px;
+}
