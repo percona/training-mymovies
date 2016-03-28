@@ -26,7 +26,7 @@ module.exports = function(app, passport) {
 	
 	// just displaying the form
 	app.get('/student/login', function(req, res, next) {
-		res.render('login');
+		res.render('student_login');
 	});
 	
 	// When they submit the form
@@ -74,7 +74,7 @@ module.exports = function(app, passport) {
 		req.flash('error', errors);
 		
 		// Render the login page
-		res.render('login', {
+		res.render('student_login', {
 			flash: req.flash(),
 			formvals: {
 				firstName1: (req.body.firstName1 || ''),
