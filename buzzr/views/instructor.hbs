@@ -135,7 +135,7 @@
 			var $d = $('<div>', {
 			  id: 'attendee-' + aid,
 			  text: (data.firstName + ' ' + data.lastInitial + '.'),
-			  class: 'alert'
+			  class: 'alert ' + data.status
 			});
 		
 			$d.prepend($s);

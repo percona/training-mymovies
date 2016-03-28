@@ -64,6 +64,9 @@ module.exports = function(server) {
 			console.log('Attendee: ' + msg.attendeeid);
 			console.log('Status: ' + msg.status);
 			
+			// Update attendee status
+			attendees[socket.attendeeid].status = msg.status;
+			
 			// Send task status to instructors
 			socket.broadcast.to('instructor').emit('update-task-status', msg);
 		});
