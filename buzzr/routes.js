@@ -16,7 +16,7 @@ module.exports = function(app, passport) {
 		}
 		
 		// logged in with identifier
-		res.render('chat', {
+		res.render('student_chat', {
 			firstName: req.session.firstName,
 			lastInitial: req.session.lastInitial,
 			studentid: req.session.studentid

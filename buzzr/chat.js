@@ -10,7 +10,6 @@ module.exports = function(server) {
 	
 		socket.on('disconnect', function() {
 			console.log('user disconnected');
-			clearTimeout(t);
 		});
 		
 		// Received a status click from student
@@ -19,29 +18,29 @@ module.exports = function(server) {
 			console.log('Status: ' + msg.status);
 		});
 		
-		// start 10 sec timeout
-		var numTasks = 3;
-		var tasks = [ 	'zeroth task', 'update repos', 'chown -R mysql:mysql',
-						'create new database', 'some really long stringed text task for testing purposes',
-						'dummy task to get things started' ];
-		
-		var t = setTimeout(sendRandTask, 10000);
-		function sendRandTask() {
-			console.log('New Task: ' + tasks[numTasks]);
-			socket.emit('new-task', { task_text: tasks[numTasks] });
+		// Received new task from instructor
+		socket.on('admin-new-task', function(msg) {
 			
-			if (numTasks > 1) {
-				numTasks--;
-				t = setTimeout(sendRandTask, 10000);
-			}
-			else
-			{
-				t = setTimeout(function() {
-					console.log('Clear Tasks');
-					socket.emit('clear-task');
-				}, 10000);
-			}
-		};
+			console.log('New Task: ' + msg.task_text);
+			
+			// Send to all others (ie: students)
+			socket.broadcast.emit('new-task', msg);
+			
+			// Send to self
+			socket.emit('new-task', msg);
+		});
+		
+		// Instructor sends clear to all
+		socket.on('admin-clear-task', function(msg) {
+			
+			console.log('Clear Task');
+			
+			// Send to all others (ie: students)
+			socket.broadcast.emit('clear-task');
+			
+			// Send to self
+			socket.emit('clear-task');
+		});
 	
 	});
 };
