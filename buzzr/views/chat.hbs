@@ -1,7 +1,23 @@
-<h1>{{#if title}}{{title}}{{else}}Chat{{/if}}</h1>
+<h2>Hi, {{firstName}} {{lastInitial}}.</h2>
+    <p class="small">Tasks and polls will appear here when appropriate. Please keep this window open.</p>
     <ul id="messages"></ul>
     <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
+      
+      <div id="tasks">
+		<div class="panel panel-primary">
+		  <div class="panel-heading">
+			<h3 class="panel-title">Current Task</h3>
+		  </div>
+		  <div class="panel-body" id="current-task">No Task at This Time.</div>
+		</div>
+	  
+		<div id="taskbuttons" style="display: none;">
+		  <button type="button" id="completed-task" class="btn btn-success">Completed Task!</button>
+		  <button type="button" id="just-a-min" class="btn btn-warning">Just another minute!</button>
+		  <button type="button" id="ack-help" class="btn btn-danger">Ack! Help!</button>
+		</div>
+	  </div>
+    
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script src="http://code.jquery.com/jquery-1.12.2.min.js"
@@ -9,14 +25,54 @@
             crossorigin="anonymous"></script>
     <script>
       var socket = io('/buzzur');
-      $('form').submit(function() {
-        socket.emit('chat message', $('#m').val());
-        $('#m').val('');
+      var studentid = '{{studentid}}';
+      
+      function sendStatus(s)
+      {
+        socket.emit('task-status', { studentid: studentid, status: s });
         return false;
+      }
+      
+      function clearAndSet(c)
+      {
+        $('#current-task').removeClass('alert-success alert-warning alert-danger');
+        if (c !== undefined || c != '')
+        {
+          $('#current-task').addClass(c);
+        }
+      }
+      
+      $('#completed-task').click(function(e){
+        clearAndSet('alert-success');
+        sendStatus('completed-task');
       });
       
-      socket.on('chat message', function(msg) {
-        $('#messages').append($('<li>').text(msg));
+      $('#just-a-min').click(function(e){
+        clearAndSet('alert-warning');
+        sendStatus('just-a-min');
+      });
+      
+      $('#ack-help').click(function(e){
+        clearAndSet('alert-danger');
+        sendStatus('ack-help');
+      });
+      
+      socket.on('new-task', function(msg) {
+        clearAndSet();
+        $('#current-task').html(msg.task_text);
+        $('#tasks').show();
+        $('#taskbuttons').show();
+      });
+      
+      socket.on('clear-task', function(m) {
+        $('#taskbuttons').hide();
+        clearAndSet();
+        $('#current-task').html('No Task at This Time.');
+      });
+      
+      $(window).bind('beforeunload', function(e) {
+        var msg = 'Please keep this window open to participate in exercises and polls.';
+        e.returnValue = msg;
+        return msg;
       });
     </script>
-    <h2>Page Reloads: {{views}}</h2>

@@ -1,4 +1,5 @@
-
+  <div class="row">
+  
       <div class="header clearfix">
         <nav>
           <ul class="nav nav-pills pull-right">
@@ -6,25 +7,53 @@
             <li role="presentation"><a href="https://www.percona.com/blog/" target="_blank">Blog</a></li>
           </ul>
         </nav>
-        <h3 class="text-muted">Percona <em>Buzzr!</em></h3>
+      </div>
+      
+      <hr/>
+      
+  </div>
+  <div class="row">
+  
+    <div class="col-md-6 tcenter">
+      <img src="/images/percona_training_logo.png" />
+    </div>
+    
+    <div class="col-md-6 tcenter">
+      
+      <div class="row">
+        <p class="lead">Welcome! Please choose an option below:</p>
       </div>
 
-      <div class="jumbotron">
-        <img src="images/percona_training_logo.png" />
+      {{#if flash}}
+        {{#each flash.success}}
+      <div class="alert alert-success" role="alert">
+        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+        <span class="sr-only">Success:</span>{{this}}
       </div>
+        {{/each}}
 
-      <div class="row marketing">
-        <div class="col-lg-6" style="text-align: center;">
-          <p><a href="/instructor"><img src="images/whiteboard.png" /></a></p>
-          <h4>Speaker</h4>
-        </div>
-
-        <div class="col-lg-6" style="text-align: center;">
-          <p><a href="/student"><img src="images/attendee.png" /></a></p>
-          <h4>Attendee / Student</h4>
-        </div>
+        {{#each flash.error}}
+      <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>{{this}}
       </div>
+        {{/each}}
+      {{/if}}
+      
+      <div class="row">
+      
+          <div class="col-md-6" style="text-align: center;">
+            <p><a href="/instructor"><img src="images/whiteboard.png" style="width: 75px;" /></a></p>
+            <h4>Speaker</h4>
+          </div>
 
-      <footer class="footer">
-        <p>&copy; 2016 Percona, Inc.</p>
-      </footer>
+          <div class="col-md-6" style="text-align: center;">
+            <p><a href="/student"><img src="images/attendee.png" style="width: 75px;" /></a></p>
+            <h4>Attendee / Student</h4>
+          </div>
+          
+      </div>
+      
+    </div>
+    
+  </div>
