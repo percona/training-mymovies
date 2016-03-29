@@ -7,16 +7,16 @@ module.exports = function(app, passport) {
 		res.render('index', { flash: req.flash() });
 	});
 	
-	// Students logic
-	app.get('/student', function(req, res, next) {
+	// Attendee logic
+	app.get('/attendee', function(req, res, next) {
 		
 		// Check for session cookie
 		if (typeof req.session.attendeeid === 'undefined') {
-			return res.redirect('/student/login');
+			return res.redirect('/attendee/login');
 		}
 		
 		// logged in with identifier
-		res.render('student_chat', {
+		res.render('attendee_chat', {
 			firstName: req.session.firstName,
 			lastInitial: req.session.lastInitial,
 			attendeeid: req.session.attendeeid
@@ -25,12 +25,12 @@ module.exports = function(app, passport) {
 	});
 	
 	// just displaying the form
-	app.get('/student/login', function(req, res, next) {
-		res.render('student_login');
+	app.get('/attendee/login', function(req, res, next) {
+		res.render('attendee_login');
 	});
 	
 	// When they submit the form
-	app.post('/student/login', function(req, res, next) {
+	app.post('/attendee/login', function(req, res, next) {
 		
 		if (!req.body) return res.sendStatus(400);
 		
@@ -53,7 +53,7 @@ module.exports = function(app, passport) {
 		
 		// do the checks
 		var errors = req.validationErrors();
-		console.log("Student Login Validation Errors: " + util.inspect(errors));
+		console.log("Attendee Login Validation Errors: " + util.inspect(errors));
 		console.log('Flash: ' + util.inspect(req.session.flash));
 		
 		if (!errors)
@@ -67,14 +67,14 @@ module.exports = function(app, passport) {
 									+ (Math.floor(Date.now() / 1000)));
 			
 			// send to chat area
-			return res.redirect('/student');
+			return res.redirect('/attendee');
 		}
 		
 		// Flash the errors
 		req.flash('error', errors);
 		
 		// Render the login page
-		res.render('student_login', {
+		res.render('attendee_login', {
 			flash: req.flash(),
 			formvals: {
 				firstName1: (req.body.firstName1 || ''),
