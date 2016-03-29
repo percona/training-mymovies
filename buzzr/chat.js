@@ -1,7 +1,6 @@
 var util = require('util');
 
 // TODO: Save current task. Send to attendees on connect/reconnect
-// TODO: Save attendee task state cause update-attendees clears this
 
 module.exports = function(server) {
 	
@@ -10,19 +9,24 @@ module.exports = function(server) {
 	// Keep state of attendees
 	var attendees = {};
 	
+	// Current task
+	var currentTask = {};
+	
 	// Socket namespace
 	var nsp = io.of('/buzzur');
 	nsp.on('connection', function(socket) {
 		
 		console.log('a user connected');
-	
+		
+		// On any connection, get the currentTask
+		socket.emit('new-task', currentTask);
+		
+		// When someone closes the window
 		socket.on('disconnect', function() {
 			console.log('User disconnected');
 			
 			// Remove user from list
 			delete attendees[socket.attendeeid];
-			
-			console.log("attendees: " + util.inspect(attendees));
 			
 			// broadcast new list to instructors
 			socket.broadcast.to('instructor').emit('update-attendees', attendees);
@@ -75,6 +79,9 @@ module.exports = function(server) {
 		socket.on('instructor-new-task', function(msg, cb) {
 			console.log('Instructor - New Task: ' + msg.task_text);
 			
+			// Save it locally
+			currentTask = msg;
+			
 			// Send to everyone
 			socket.broadcast.emit('new-task', msg);
 			
@@ -86,11 +93,19 @@ module.exports = function(server) {
 		socket.on('instructor-clear-task', function(msg, cb) {
 			console.log('Instructor - Clear Task');
 			
+			// Clear local cache
+			currentTask = {};
+			
+			// Clear all attendee status
+			Object.keys(attendees).forEach(function(k) {
+				attendees[k].status = '';
+			});
+			
 			// Send to everyone else
 			socket.broadcast.emit('clear-task');
 			
-			// Return callback
-			cb(msg);
+			// Return updated attendees list via callback
+			cb(attendees);
 		});
 	
 	});

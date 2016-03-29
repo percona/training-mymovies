@@ -56,6 +56,7 @@
       $('#clear-task').click(function(e) {
         socket.emit('instructor-clear-task', {}, function(msg) {
           $('#current-task').html('No Task at This Time.');
+          updateAttendees(msg);
         });
       });
       
