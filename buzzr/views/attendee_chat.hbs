@@ -1,4 +1,5 @@
-<h2>Hi, {{firstName}} {{lastInitial}}.</h2>
+
+    <h2>Hi, {{firstName}} {{lastInitial}}.</h2>
     <p class="small">Tasks and polls will appear here when appropriate. Please keep this window open.</p>
     <ul id="messages"></ul>
     <form action="">
@@ -20,58 +21,12 @@
     
     </form>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="http://code.jquery.com/jquery-1.12.2.min.js"
-            integrity="sha256-lZFHibXzMHo3GGeehn1hudTAP3Sc0uKXBXAzHX1sjtk="
-            crossorigin="anonymous"></script>
+    <script src="/js/buzzr.js"></script>
     <script>
-      var socket = io('/buzzur');
       var attendeeid = '{{attendeeid}}';
       var firstName = '{{firstName}}';
       var lastInitial = '{{lastInitial}}';
-      
-      function sendStatus(s)
-      {
-        socket.emit('task-status', { attendeeid: attendeeid, status: s });
-        return false;
-      }
-      
-      function clearAndSet(c)
-      {
-        $('#current-task').removeClass('alert-success alert-warning alert-danger');
-        if (c !== undefined || c != '')
-        {
-          $('#current-task').addClass(c);
-        }
-      }
-      
-      $('#completed-task').click(function(e){
-        clearAndSet('alert-success');
-        sendStatus('alert-success');
-      });
-      
-      $('#just-a-min').click(function(e){
-        clearAndSet('alert-warning');
-        sendStatus('alert-warning');
-      });
-      
-      $('#ack-help').click(function(e){
-        clearAndSet('alert-danger');
-        sendStatus('alert-danger');
-      });
-      
-      socket.on('new-task', function(msg) {
-        clearAndSet();
-        $('#current-task').html(msg.task_text);
-        $('#tasks').show();
-        $('#task-buttons').show();
-      });
-      
-      socket.on('clear-task', function(m) {
-        $('#task-buttons').hide();
-        clearAndSet();
-        $('#current-task').html('No Task at This Time.');
-      });
-      
+            
       // Announce we've connected to the room
       socket.on('connect', function() {
       	socket.emit('attendee-joined', {
@@ -79,11 +34,5 @@
       		firstName: firstName,
       		lastInitial: lastInitial
       	});
-      });
-      
-      $(window).bind('beforeunload', function(e) {
-        var msg = 'Please keep this window open to participate in exercises and polls.';
-        e.returnValue = msg;
-        return msg;
       });
     </script>

@@ -14,19 +14,19 @@ module.exports = function(server) {
 	var nsp = io.of('/buzzur');
 	nsp.on('connection', function(socket) {
 		
-		console.log('a user connected');
+		console.log('User Connected');
 		
-		// On any connection, get the currentTask
+		// Attendee and instructor, on connection, get the currentTask
 		socket.emit('new-task', currentTask);
 		
 		// When someone closes the window
 		socket.on('disconnect', function() {
-			console.log('User disconnected');
+			console.log('User Disconnected');
 			
 			// Remove user from list
 			delete attendees[socket.attendeeid];
 			
-			// broadcast new list to instructors
+			// broadcast updated list to instructors
 			socket.broadcast.to('instructor').emit('update-attendees', attendees);
 		});
 		
@@ -37,8 +37,8 @@ module.exports = function(server) {
 			// join instructors room. could be more than 1 instructor.
 			socket.join('instructor');
 			
-			console.log("joined instructor room");
-			console.log("attendees: " + util.inspect(attendees));
+			console.log("Joined Instructor Room");
+			console.log("Attendees List: " + util.inspect(attendees));
 			
 			// Once instructor has joined, broadcast list of attendees to other instructors
 			socket.broadcast.to('instructor').emit('update-attendees', attendees);
@@ -57,14 +57,13 @@ module.exports = function(server) {
 			// add/update attendees list
 			attendees[socket.attendeeid] = msg;
 			
-			// Broadcast list to all instructors
+			// Broadcast updated attendees list to all instructors
 			socket.broadcast.to('instructor').emit('update-attendees', attendees);
 		});
 		
 		// Received a status click from attendee
 		socket.on('task-status', function(msg) {
-			console.log('Attendee: ' + msg.attendeeid);
-			console.log('Status: ' + msg.status);
+			console.log('Attendee (' + msg.attendeeid + ') Status: ' + msg.status);
 			
 			// Update attendee status
 			attendees[socket.attendeeid].status = msg.status;
@@ -86,7 +85,7 @@ module.exports = function(server) {
 			// Send to everyone
 			socket.broadcast.emit('new-task', msg);
 			
-			// Return callback
+			// Return task and updated attendees list back to instructor
 			cb(msg, attendees);
 		});
 		
@@ -100,11 +99,11 @@ module.exports = function(server) {
 			// Clear all attendee status
 			clearAttendeeStatuses();
 			
-			// Send to everyone else
+			// Send to everyone
 			socket.broadcast.emit('clear-task');
 			
 			// Return updated attendees list via callback
-			cb(attendees);
+			cb(msg, attendees);
 		});
 	
 	});

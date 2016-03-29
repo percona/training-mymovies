@@ -30,6 +30,7 @@
 		    <button type="button" id="push-new-task" class="btn btn-success">Push Task</button>
 			<button type="button" id="clear-task" class="btn btn-success">Clear Task</button>
 		  </div>
+		  <div id="task-buttons" style="display: none;"></div>
 		</div>
 	
 	  </form>
@@ -44,106 +45,15 @@
     </div>
     
   </div>
+  
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/buzzr.js"></script>
+  <script>
+    // Join the instructor channel
+	socket.on('connect', function(s) {
+		socket.emit('instructor-joined', {}, function(msg) {
+			updateAttendees(msg);
+		});
+	});
+  </script>
     
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="http://code.jquery.com/jquery-1.12.2.min.js"
-            integrity="sha256-lZFHibXzMHo3GGeehn1hudTAP3Sc0uKXBXAzHX1sjtk="
-            crossorigin="anonymous"></script>
-    <script>
-      var socket = io('/buzzur');
-      
-      // Clear the current task from everyone
-      $('#clear-task').click(function(e) {
-        socket.emit('instructor-clear-task', {}, function(msg) {
-          $('#current-task').html('No Task at This Time.');
-          updateAttendees(msg);
-        });
-      });
-      
-      // Send out new task to everyone
-      $('#push-new-task').click(function(e) {
-        
-        if ($('#task').val().length < 2)
-        	return false;
-        
-        socket.emit('instructor-new-task', {
-          task_text: $('#task').val()
-        }, function(msg, a) {
-		  $('#current-task').html(msg.task_text);
-		  $('#tasks').show();
-		  $('#taskbuttons').show();
-		  
-		  updateAttendees(a);
-        });
-      });
-      
-      // Join the instructor channel
-      socket.on('connect', function(s) {
-      	socket.emit('instructor-joined', {}, function(msg) {
-      		updateAttendees(msg);
-      	});
-      });
-      
-      // Received task
-      socket.on('new-task', function(msg) {
-        $('#current-task').html(msg.task_text);
-        $('#tasks').show();
-        $('#taskbuttons').show();
-      });
-      
-      // Received clear tasks
-      socket.on('clear-task', function(msg) {
-        $('#current-task').html('No Task at This Time.');
-      });
-      
-      // Received an attendee has joined
-      socket.on('update-attendees', function(msg) {
-      	updateAttendees(msg);
-      });
-      
-      // Received an attendee has updated their status
-      socket.on('update-task-status', function(msg) {
-        
-        var dn = '#attendee-' + msg.attendeeid;
-        
-        // remove any previous status
-        $(dn).removeClass('alert-success alert-warning alert-danger');
-        
-        // Update attendee status
-        $(dn).addClass(msg.status);
-      });
-      
-      // Warn before navigating away
-      $(window).bind('beforeunload', function(e) {
-        var msg = 'Please keep this window open to participate in exercises and polls.';
-        e.returnValue = msg;
-        return msg;
-      });
-      
-      // Helper function for updating attendees list
-      function updateAttendees(msg) {
-		$('#attendees-list').empty();
-	  
-		if ($.isEmptyObject(msg))
-		{
-			$('#attendees-list').text('None');
-		}
-		else
-		{
-		  $.each(msg, function(aid, data) {
-			var $s = $('<span>', {
-			  class: 'glyphicon glyphicon-user'
-			});
-		
-			var $d = $('<div>', {
-			  id: 'attendee-' + aid,
-			  text: (data.firstName + ' ' + data.lastInitial + '.'),
-			  class: 'alert ' + data.status
-			});
-		
-			$d.prepend($s);
-			$('#attendees-list').append($d);
-		  });
-		}
-      }
-    </script>
