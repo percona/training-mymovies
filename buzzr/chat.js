@@ -1,7 +1,5 @@
 var util = require('util');
 
-// TODO: Save current task. Send to attendees on connect/reconnect
-
 module.exports = function(server) {
 	
 	var io = require('socket.io').listen(server);
@@ -82,11 +80,14 @@ module.exports = function(server) {
 			// Save it locally
 			currentTask = msg;
 			
+			// Clear attendee statuses
+			clearAttendeeStatuses();
+			
 			// Send to everyone
 			socket.broadcast.emit('new-task', msg);
 			
 			// Return callback
-			cb(msg);
+			cb(msg, attendees);
 		});
 		
 		// Instructor sends clear to all
@@ -97,9 +98,7 @@ module.exports = function(server) {
 			currentTask = {};
 			
 			// Clear all attendee status
-			Object.keys(attendees).forEach(function(k) {
-				attendees[k].status = '';
-			});
+			clearAttendeeStatuses();
 			
 			// Send to everyone else
 			socket.broadcast.emit('clear-task');
@@ -109,4 +108,10 @@ module.exports = function(server) {
 		});
 	
 	});
+	
+	function clearAttendeeStatuses() {
+		Object.keys(attendees).forEach(function(k) {
+			attendees[k].status = '';
+		});
+	};
 };

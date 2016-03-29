@@ -37,7 +37,7 @@ module.exports = function(app, passport) {
 		// create the checks
 		if (req.body.firstName1.length < 1)
 		{
-			req.checkBody('firstName1', 'First Name is Required.').notEmpty();
+			req.checkBody('firstName1', 'First name is required.').notEmpty();
 		}
 		else
 		{

@@ -68,10 +68,12 @@
         
         socket.emit('instructor-new-task', {
           task_text: $('#task').val()
-        }, function(msg) {
+        }, function(msg, a) {
 		  $('#current-task').html(msg.task_text);
 		  $('#tasks').show();
 		  $('#taskbuttons').show();
+		  
+		  updateAttendees(a);
         });
       });
       
