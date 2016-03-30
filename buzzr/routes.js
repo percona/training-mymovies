@@ -1,6 +1,9 @@
 var util = require('util');
 
-module.exports = function(app, passport) {
+module.exports = function(app, passport, db) {
+	
+	// Get the database
+	var db = require('./db');
 	
 	// GET home page.
 	app.get('/', function(req, res, next) {
@@ -104,7 +107,17 @@ module.exports = function(app, passport) {
 	
 	// Instructor page. If logged in, displays info from google profile.
 	app.get('/instructor', isLoggedIn, function(req, res, next) {
+		
+		// get saved tasks for this instructor
+		var t;
+		db.all("SELECT * FROM savedTasks WHERE googleid = '" + req.user.id + "' ORDER BY sorder",
+			function(err, rows) {
+				t = rows;
+			}
+		);
+		
 		res.render('instructor', {
+			tasks: t,
 			user: req.user
 		});
 	});

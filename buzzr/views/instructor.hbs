@@ -24,6 +24,7 @@
 		<div class="row">
 		  <div class="col-md-4">
             <input id="task" autocomplete="off" />
+            <input type="checkbox" id="saveTask" />Save Task
           </div>
   
 		  <div id="instructor-buttons" class="col-md-8">
@@ -31,6 +32,21 @@
 			<button type="button" id="clear-task" class="btn btn-success">Clear Task</button>
 		  </div>
 		  <div id="task-buttons" style="display: none;"></div>
+		</div>
+		
+		<div class="row">
+		  <div class="col-md-12">
+		    <div class="panel panel-primary">
+			  <div class="panel-heading"><h3 class="panel-title">Saved Tasks</h3></div>
+			  <div class="panel-body">
+				<ul>
+				{{#each tasks}}
+				  <li>{{taskId}} - {{taskText}}</li>
+				{{/each}}
+				</ul>
+			  </div>
+			</div>
+		  </div>
 		</div>
 	
 	  </form>
@@ -49,9 +65,11 @@
   <script src="/socket.io/socket.io.js"></script>
   <script src="/js/buzzr.js"></script>
   <script>
+    var instructorid = '{{user.id}}';
+    
     // Join the instructor channel
-	socket.on('connect', function(s) {
-		socket.emit('instructor-joined', {}, function(msg) {
+	socket.on('connect', function() {
+		socket.emit('instructor-joined', { id: instructorid }, function(msg) {
 			updateAttendees(msg);
 		});
 	});

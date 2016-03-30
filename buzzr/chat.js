@@ -2,7 +2,11 @@ var util = require('util');
 
 module.exports = function(server) {
 	
+	// Get the socket
 	var io = require('socket.io').listen(server);
+	
+	// Get the database
+	var db = require('./db');
 	
 	// Keep state of attendees
 	var attendees = {};
@@ -74,16 +78,25 @@ module.exports = function(server) {
 		
 		// Received new task from instructor
 		socket.on('instructor-new-task', function(msg, cb) {
-			console.log('Instructor - New Task: ' + msg.task_text);
+			console.log('Instructor - ' + msg.id);
+			console.log('           - New Task:  ' + msg.taskText);
+			console.log('           - Save Task: ' + msg.saveTask);
 			
 			// Save it locally
-			currentTask = msg;
+			currentTask = msg.taskText;
+			
+			// Save to database if requested
+			if (msg.saveTask)
+			{
+				db.run("INSERT INTO savedTasks (googleid, taskText, sorder) VALUES "
+					+ "('" + msg.id + "', '" + msg.taskText + "', 1)");
+			}
 			
 			// Clear attendee statuses
 			clearAttendeeStatuses();
 			
 			// Send to everyone
-			socket.broadcast.emit('new-task', msg);
+			socket.broadcast.emit('new-task', msg.taskText);
 			
 			// Return task and updated attendees list back to instructor
 			cb(msg, attendees);

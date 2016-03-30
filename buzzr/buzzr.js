@@ -7,7 +7,8 @@ var logger = require('morgan');
 
 var session = require('express-session');
 var flash = require('express-flash');
-var FileStore = require('session-file-store')(session);
+
+var SQLiteStore = require('connect-sqlite3')(session);
 
 var passport = require('passport');
 
@@ -15,15 +16,12 @@ var validator = require('express-validator');
 
 // Main ==============================
 
+// Setup database
+var db = require('./db');
+
 // view engine setup for handlebars
 app.set('views', __dirname + '/views');
 app.set('view engine', 'hbs');
-
-var Handlebars = require('hbs');
-Handlebars.registerHelper('json', function(context) {
-    return JSON.stringify(context);
-});
-
 
 // HTTP Logger
 app.use(logger('tiny'));
@@ -47,7 +45,10 @@ app.use(session({
 	secret: '1K37ifYLnM',
 	saveUninitialized: true,
 	resave: true,
-	store: new FileStore()
+	store: new SQLiteStore({
+		table: 'sessions',
+		db: 'buzzr'
+	})
 }));
 
 // For flash messages

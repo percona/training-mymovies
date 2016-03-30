@@ -31,3 +31,6 @@ npm-debug.log
 
 # Don't save sessions
 sessions/*
+
+# Don't save the database
+buzzr.db

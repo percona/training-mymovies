@@ -17,13 +17,19 @@ $('#push-new-task').click(function(e) {
 	if ($('#task').val().length < 2)
 		return false;
 	
-	socket.emit('instructor-new-task', { task_text: $('#task').val() }, function(msg, a) {
-		$('#current-task').html(msg.task_text);
-		$('#tasks').show();
-		$('#taskbuttons').show();
-		
-		updateAttendees(a);
-	});
+	socket.emit('instructor-new-task', {
+			taskText: $('#task').val(),
+			saveTask: $('#saveTask').prop("checked"),
+			id: instructorid
+		},
+		function(msg, a) {
+			$('#current-task').html(msg.taskText);
+			$('#tasks').show();
+			$('#taskbuttons').show();
+			
+			updateAttendees(a);
+		}
+	);
 });
 
 // Send completed to instructor
@@ -45,11 +51,11 @@ $('#ack-help').click(function(e){
 });
 
 // Received new task
-socket.on('new-task', function(msg) {
+socket.on('new-task', function(taskText) {
 	clearAndSet();
-	$('#current-task').html(msg.task_text);
+	$('#current-task').html(taskText);
 	
-	if (!$.isEmptyObject(msg))
+	if (!$.isEmptyObject(taskText))
 		$('#task-buttons').show();
 });
 
