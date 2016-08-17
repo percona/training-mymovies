@@ -53,10 +53,13 @@ $('#ack-help').click(function(e){
 // Received new task
 socket.on('new-task', function(taskText) {
 	clearAndSet();
-	$('#current-task').html(taskText);
 	
 	if (!$.isEmptyObject(taskText))
+	{
+		$('#current-task').html(taskText);
 		$('#task-buttons').show();
+		$('#audiotag1')[0].play();
+	}
 });
 
 // Received clear task
