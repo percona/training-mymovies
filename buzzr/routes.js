@@ -42,10 +42,6 @@ module.exports = function(app, passport, db) {
 		{
 			req.checkBody('firstName1', 'First name is required.').notEmpty();
 		}
-		else
-		{
-			req.checkBody('firstName1', 'First Name must be at least 2 characters.').isAlpha().len(2,20);
-		}
 		
 		req.checkBody('lastInitial1', 'Please provide an initial.').notEmpty();
 		
@@ -109,17 +105,22 @@ module.exports = function(app, passport, db) {
 	app.get('/instructor', isLoggedIn, function(req, res, next) {
 		
 		// get saved tasks for this instructor
-		var t;
-		db.all("SELECT * FROM savedTasks WHERE googleid = '" + req.user.id + "' ORDER BY sorder",
+		db.all("SELECT * FROM savedTasks WHERE googleid = '"
+			+ req.user.id + "' ORDER BY sorder",
 			function(err, rows) {
-				t = rows;
+				
+				// if error, create a row-ish object containing the error
+				if (err != null)
+					rows = [ { taskId: 1, taskText: err } ];
+				
+				// Render the page
+				res.render('instructor', {
+					tasks: rows,
+					user: req.user
+				});
 			}
 		);
 		
-		res.render('instructor', {
-			tasks: t,
-			user: req.user
-		});
 	});
 	
 	app.get('/logout', function(req, res) {
