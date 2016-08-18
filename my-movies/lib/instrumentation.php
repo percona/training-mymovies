@@ -441,6 +441,7 @@ class MySQLi_perf extends MySQLi
     	
     	$retry_count = 0;
 		$result = false;
+		
 		while($retry_count < MySQLi_perf::$deadlock_try_limit)
 		{
 			$query = $instance->instrument_query($query, $retry_count);

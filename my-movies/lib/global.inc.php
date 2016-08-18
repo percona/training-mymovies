@@ -12,7 +12,7 @@ include "instrumentation.php";
 
 Instrumentation::get_instance()->start_request(true);
 
-$conn = new MySQLi_perf(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE);
+$conn = MySQLi_perf::mysqli_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE);
 
 if (isset($_SESSION['user_id']))
 {

@@ -133,7 +133,7 @@ function create_new_user($first_name, $last_name, $email)
 
 function mysql_query_wrapper($query)
 {
-	global $__queries;
+	global $conn, $__queries;
 	
 	/*
 	 This is a very light-weight wrapper around mysql_query() that
@@ -150,7 +150,7 @@ function mysql_query_wrapper($query)
 	
 	$__queries[] = $query;
 	
-	$return = MySQLi_perf::query($query);
+	$return = MySQLi_perf::mysqli_query($conn, $query);
 	
 	if (!$return)
 	{
