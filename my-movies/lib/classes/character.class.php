@@ -19,8 +19,8 @@ class character
 			throw new Exception("Query failed with " . mysql_error());
 		else
 		{
-			if (!mysql_numrows($result))
-				return; // Query OK, but char not found.
+			if ($result->num_rows == 0)
+				return;
 			
 			foreach($result->fetch_assoc() as $column => $value)
 			{

@@ -163,7 +163,7 @@ class user
 		$result = mysql_query_wrapper(sprintf("SELECT id FROM movie_ratings WHERE
 			user_id = %d AND movie_id = %d", $this->id, $movie_id));
 			
-		return mysql_numrows($result);
+		return ($result->num_rows > 0);
 	}
 	
 	function add_rating($id, $vote)
