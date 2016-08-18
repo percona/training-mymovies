@@ -63,9 +63,14 @@ app.use(passport.session());
 var routes = require('./routes')(app, passport);
 
 // Get the port and start 'er up
-var port = process.env.PORT || 3000;
++var port = process.env.npm_package_config_port;
 var server = app.listen(port, function() {
 	console.log("Lisening on " + port);
+}).on('error', function(err) {
+	if (err.errno === 'EADDRINUSE')
+		console.log("Port " + port + " is in use. Try another one by running 'npm config set buzzr:port NNNN'");
+	else
+		console.log(err);
 });
 
 // Chat stuff
