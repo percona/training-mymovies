@@ -1,20 +1,25 @@
 <?php
+
 include "../lib/global.inc.php";
 
-if ($_GET['login'] == 'yes') {
-
+if ($_GET['login'] == 'yes')
+{
 	$tmp = get_random_user();
 	$_SESSION['user_id'] = $tmp['id'];
+	
 	redirect_to("home.php");
-
-} elseif (isset($_POST['email_address'])) {
-
+}
+elseif (isset($_POST['email_address']))
+{
 	$result = mysql_query_wrapper(sprintf("SELECT id FROM users WHERE email_address = '%s'", 
-		mysql_real_escape_string($_POST['email_address'])
+		mysqli_real_escape_string($conn, $_POST['email_address'])
 	));
-
-	if (mysql_numrows($result) == 1) {
-		$_SESSION['user_id'] = mysql_result($result,0,'id');
+	
+	if ($result->num_rows == 1)
+	{
+		$_id = $result->fetch_row();
+		$_SESSION['user_id'] = $_id[0];
+		
 		redirect_to("home.php");
 	}
 }
