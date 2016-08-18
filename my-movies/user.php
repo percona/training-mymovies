@@ -15,16 +15,16 @@ Email: <?php echo $user->email_address?><br />
 <br />
 
 <h3>Friends [<a id="add_friend" href="user/add_friend.php?id=<?php echo $user->id?>">+</a>]</h3>
+
 <?php
-$i=0;
-foreach($user->friends() as $friend_id) {
+$i = 0;
+foreach($user->friends() as $friend_id)
+{
 	$i++;
 	$friend = new user($friend_id);
 	print "<a id='friend_$i' href=\"".$friend->link()."\">$friend->email_address</a><br />";
-
 }
 
+end_template();
+
 ?>
-
-
-<?php end_template(); ?>

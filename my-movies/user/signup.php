@@ -1,11 +1,10 @@
 <?php
 include "../lib/global.inc.php";
 
-if (!empty($_POST)) {
-
+if (!empty($_POST))
+{
 	$_SESSION['user_id'] = create_new_user($_POST['first_name'], $_POST['last_name'], $_POST['email_address']);
 	redirect_to("home.php");
-
 }
 
 print start_template();

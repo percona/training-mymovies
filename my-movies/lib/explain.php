@@ -12,7 +12,7 @@ $result = mysql_query_wrapper("EXPLAIN " . $_GET['query']);
 
 print "<pre>";
 
-while($row = mysql_fetch_assoc($result))
+while($row = $result->fetch_assoc())
 {
 	print_r($row);
 }

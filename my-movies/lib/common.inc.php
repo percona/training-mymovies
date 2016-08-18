@@ -2,51 +2,52 @@
 
 function get_number_of_users()
 {
-	$result = mysql_query_wrapper("SELECT count(*) as c FROM users");
+	$result = mysql_query_wrapper("SELECT COUNT(*) AS c FROM users");
+	$count = $result->fetch_row();
 	
-	return mysql_result($result,0,'c');
+	return $count[0];
 }
 
 function get_number_of_movies()
 {
-	$result = mysql_query_wrapper("SELECT count(*) as c FROM title");
+	$result = mysql_query_wrapper("SELECT COUNT(*) AS c FROM title");
+	$count = $result->fetch_row();
 	
-	return mysql_result($result,0,'c');
+	return $count[0];
 }
 
 function get_number_of_actors()
 {
-	$result = mysql_query_wrapper("SELECT count(*) as c FROM name");
+	$result = mysql_query_wrapper("SELECT COUNT(*) AS c FROM name");
+	$count = $result->fetch_row();
 	
-	return mysql_result($result,0,'c');
+	return $count[0];
 }
 
 function get_random_movie()
 {
 	$result = mysql_query_wrapper("SELECT * FROM title WHERE title != '' AND kind_id = 1 ORDER BY RAND() LIMIT 1");
 	
-	return mysql_fetch_assoc($result);
+	return $result->fetch_assoc();
 }
 
 function get_random_actor()
 {
 	$result = mysql_query_wrapper("SELECT * FROM name ORDER BY RAND() LIMIT 1");
 	
-	return mysql_fetch_assoc($result);
+	return $result->fetch_assoc();
 }
 
 function get_random_user()
 {
 	$result = mysql_query_wrapper("SELECT * FROM users ORDER BY RAND() LIMIT 1");
 	
-	return mysql_fetch_assoc($result);
+	return $result->fetch_assoc();
 }
 
 function redirect_to($url)
 {
 	header("Location: $url");
-	
-	die();
 }
 
 function get_comments()
@@ -54,7 +55,7 @@ function get_comments()
 	$return = array();
 	$result = mysql_query_wrapper("SELECT * FROM comments ORDER BY id DESC limit 10");
 	
-	while($row = mysql_fetch_assoc($result))
+	while($row = $result->fetch_assoc())
 	{
 		$return[] = $row;
 	}
@@ -65,9 +66,9 @@ function get_comments()
 function get_being_viewed($limit = 5)
 {
 	$return = array();
-	$result = mysql_query_wrapper("SELECT DISTINCT type, viewed_id FROM page_views ORDER BY id DESC LIMIT $limit");
+	$result = mysql_query_wrapper("SELECT DISTINCT type, viewed_id FROM page_views ORDER BY viewed_id DESC LIMIT $limit");
 	
-	while($row = mysql_fetch_assoc($result))
+	while($row = $result->fetch_assoc())
 	{
 		$return[] = $row;
 	}
@@ -80,7 +81,7 @@ function get_users_online()
 	$return = array();
 	$result = mysql_query_wrapper("SELECT * FROM users WHERE last_login_date > NOW()-INTERVAL 10 MINUTE ORDER BY last_login_date DESC LIMIT 10");
 	
-	while($row = mysql_fetch_assoc($result))
+	while($row = $result->fetch_assoc())
 	{
 		$return[] = $row['id'];
 	}
@@ -132,7 +133,7 @@ function create_new_user($first_name, $last_name, $email)
 
 function mysql_query_wrapper($query)
 {
-	global $__queries;
+	global $conn, $__queries;
 	
 	/*
 	 This is a very light-weight wrapper around mysql_query() that
@@ -149,7 +150,7 @@ function mysql_query_wrapper($query)
 	
 	$__queries[] = $query;
 	
-	$return = MySQL_perf::mysql_query($query);
+	$return = MySQLi_perf::mysqli_query($conn, $query);
 	
 	if (!$return)
 	{

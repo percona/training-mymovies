@@ -1,47 +1,44 @@
 <?php
 
-class character {
+class character
+{
 	var $id;
 	var $name = 'Unknown';
-
-	function link() {
+	
+	function link()
+	{
 		return BASE_URI . "character.php?id=$this->id&name=".urlencode($this->name);
 	}
 
-	function __construct($id) {
-	
+	function __construct($id)
+	{
 		$this->id = (int) $id;
 		$result = mysql_query_wrapper("SELECT * FROM char_name WHERE id = $this->id");
 		
-		if (!$result) {
-			
+		if (!$result)
 			throw new Exception("Query failed with " . mysql_error());
+		else
+		{
+			if ($result->num_rows == 0)
+				return;
 			
-		} else {
-		
-			if (!mysql_numrows($result)) {
-				return; // Query OK, but char not found.
-			}
-			
-			foreach(mysql_fetch_assoc($result) as $column => $value) {
+			foreach($result->fetch_assoc() as $column => $value)
+			{
 				$this->$column = $value;
 			}
-			
 		}
-	
 	}
 	
-	function movies() {
-
+	function movies()
+	{
 		$return = array();
-		$result = mysql_query("SELECT * FROM cast_info WHERE person_role_id = $this->id");
-
-		while($row = mysql_fetch_assoc($result)) {
+		$result = mysql_query_wrapper("SELECT * FROM cast_info WHERE person_role_id = $this->id");
+		
+		while($row = $result->fetch_assoc())
+		{
 			$return[] = $row;
 		}
 		
 		return $return;
-
 	}
-	
 }
