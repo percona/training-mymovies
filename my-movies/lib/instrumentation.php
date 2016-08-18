@@ -26,8 +26,6 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-
-
 /* CONTENTS
  * Three classes for easing the implementation of instrumentation in your application.
  * Instrumentation - Provides an interface for storing counters and exporting them to the apache environment
@@ -340,29 +338,36 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * If you use the functional interface replace:  mysqli_connect(...)
  *                                        with:  MySQLi_per::mysqli_connect(...)
  */
-class MySQLi_perf extends MySQLi {
+class MySQLi_perf extends MySQLi
+{
 	#>1 IS ONLY SAFE IN AUTOCOMMIT MODE!!!!
 	public static $deadlock_try_limit = 1;
 	
 	/* Object interface constructor */
-	public function __construct($host=NULL, $user=NULL, $pass=NULL, $db=NULL){
-		if($host === NULL) ini_get("mysql.default_host");
-		if($user === NULL) ini_get("mysql.default_user");
-	  	if($pass === NULL) ini_get("mysql.default_password");
+	public function __construct($host = NULL, $user = NULL, $pass = NULL, $db = NULL)
+	{
 	  	Instrumentation::get_instance()->increment('mysql_connection_count');
 	  	Instrumentation::get_instance()->timer();
+      	
       	parent::__construct($host, $user, $pass, $db);
+      	
+      	if (mysqli_connect_error())
+      	{
+            die('MySQL Error (' . mysqli_connect_errno() . ') '
+                    . mysqli_connect_error());
+        }
+      	
       	Instrumentation::get_instance()->increment('mysql_connect_time', Instrumentation::get_instance()->timer());
 	}
 	
-
-    
-    public function query($query, $resultmode = NULL) {
+    public function query($query, $resultmode = NULL)
+    {
     	$instance = Instrumentation::get_instance();
     	
     	$retry_count = 0;
     	
-		while($retry_count < MySQLi_perf::$deadlock_try_limit) {
+		while($retry_count < MySQLi_perf::$deadlock_try_limit)
+		{
 			$query = $instance->instrument_query($query, $retry_count);
     		$instance->increment('mysql_query_count', 1);
 			$retry_count = 0;
@@ -371,26 +376,29 @@ class MySQLi_perf extends MySQLi {
 	    	$r = parent::query($query, $resultmode);
 	    	$instance->increment('mysql_query_exec_time', $instance->timer());
 	    	
-			if (mysqli_errno($this) == 1213) { /* 1213 (ER_LOCK_DEADLOCK)
-									  Deadlock detected retry operation */
+			if (mysqli_errno($this) == 1213)
+			{
+				/* 1213 (ER_LOCK_DEADLOCK) Deadlock detected retry operation */
 	    		$instance->increment('mysql_deadlock_count', 1);
 				++$retry_count;
+				
 				continue; // loop to the start of the while loop
 			}
 			
 			break;
-	    	
 		}
 	    
 		return $r;
     }
     
-    public function multi_query($query, $resultmode = NULL) {
+    public function multi_query($query, $resultmode = NULL)
+    {
     	$instance = Instrumentation::get_instance();
     	
     	$retry_count = 0;
     	
-		while($retry_count < MySQLi_perf::$deadlock_try_limit) {
+		while($retry_count < MySQLi_perf::$deadlock_try_limit)
+		{
 			$query = $this->instrument_query($query, $retry_count);
     		$instance->increment('mysql_query_count', 1);
 			$retry_count = 0;
@@ -400,37 +408,41 @@ class MySQLi_perf extends MySQLi {
 	    	
 	    	$instance->increment('mysql_query_exec_time', Instrumentation::get_instance()->timer());
 	    	
-			if ($this->errno() == 1213) { /* 1213 (ER_LOCK_DEADLOCK)
-									  Deadlock detected retry operation */
+			if ($this->errno() == 1213)
+			{
+				/* 1213 (ER_LOCK_DEADLOCK) Deadlock detected retry operation */
 	    		$instance->increment('mysql_deadlock_count', 1);
 				++$retry_count;
+				
 				continue; // loop to the start of the while loop
 			}
 			
 			break;
-	    	
 		}
 	    
 		return $result;
     }
 
 	/* emulate functional mysqli_connect interface */
-	public static function mysqli_connect($host=NULL, $user=NULL, $pass=NULL, $db=NULL, $port=NULL, $socket=NULL) {	
-		
+	public static function mysqli_connect($host = NULL, $user = NULL, $pass = NULL, $db = NULL, $port = NULL, $socket = NULL)
+	{	
 		Instrumentation::get_instance()->timer();;
       	$r = mysqli_connect($host, $user, $pass, $db, $port, $socket);
       	Instrumentation::get_instance()->increment('mysql_connection_count');
       	Instrumentation::get_instance()->increment('mysql_connect_time', Instrumentation::get_instance()->timer());
+      	
       	return $r;
 	}
 	
 	/* emulate functional mysqli_query interface */
-    public static function mysqli_query($link, $query, $resultmode = NULL) {
+    public static function mysqli_query($link, $query, $resultmode = NULL)
+    {
     	$instance = Instrumentation::get_instance();
     	
     	$retry_count = 0;
 		$result = false;
-		while($retry_count < MySQLi_perf::$deadlock_try_limit) {
+		while($retry_count < MySQLi_perf::$deadlock_try_limit)
+		{
 			$query = $instance->instrument_query($query, $retry_count);
     		$instance->increment('mysql_query_count', 1);
 			$retry_count = 0;
@@ -440,15 +452,16 @@ class MySQLi_perf extends MySQLi {
 	    	$errno = mysqli_errno($link);
 	    	$instance->increment('mysql_query_exec_time', Instrumentation::get_instance()->timer());
 	    	
-			if ($errno == 1213) { /* 1213 (ER_LOCK_DEADLOCK)
-									  Deadlock detected retry operation */
+			if ($errno == 1213)
+			{
+				/* 1213 (ER_LOCK_DEADLOCK) Deadlock detected retry operation */
 	    		$instance->increment('mysql_deadlock_count', 1);
 				++$retry_count;
+				
 				continue; // loop to the start of the while loop
 			}
 			
 			break;
-	    	
 		}
 	    
 		return $result;
