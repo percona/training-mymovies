@@ -32,7 +32,7 @@ class character
 	function movies()
 	{
 		$return = array();
-		$result = mysql_query("SELECT * FROM cast_info WHERE person_role_id = $this->id");
+		$result = mysql_query_wrapper("SELECT * FROM cast_info WHERE person_role_id = $this->id");
 		
 		while($row = $result->fetch_assoc())
 		{
