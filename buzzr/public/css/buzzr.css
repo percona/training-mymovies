@@ -69,11 +69,13 @@ body {
   text-align: center;
 }
 
+#saved-tasks > .alert,
 #attendees-list > .alert {
   padding: 2px;
   margin-bottom: 8px;
 }
 
+#saved-tasks > .alert > .glyphicon,
 #attendees-list > .alert > .glyphicon {
   padding-right: 10px;
 }
