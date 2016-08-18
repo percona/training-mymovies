@@ -17,19 +17,7 @@ $('#push-new-task').click(function(e) {
 	if ($('#task').val().length < 2)
 		return false;
 	
-	socket.emit('instructor-new-task', {
-			taskText: $('#task').val(),
-			saveTask: $('#saveTask').prop("checked"),
-			id: instructorid
-		},
-		function(msg, a) {
-			$('#current-task').html(msg.taskText);
-			$('#tasks').show();
-			$('#taskbuttons').show();
-			
-			updateAttendees(a);
-		}
-	);
+	pushTask(0);
 });
 
 // Send completed to instructor
@@ -95,6 +83,27 @@ $(window).bind('beforeunload', function(e) {
 
 // HELPERS ===================================
 
+// pushTask accepts either a saved taskId or 0 as parameter
+// On 0, the value of the text box is used. > 0 does a DB
+// lookup and pushes that taskId
+function pushTask(tid)
+{
+	socket.emit('instructor-new-task', {
+			savedTaskId: tid,
+			taskText: $('#task').val(),
+			saveTask: $('#saveTask').prop("checked"),
+			id: instructorid
+		},
+		function(msg, a) {
+			$('#current-task').html(msg.taskText);
+			$('#tasks').show();
+			$('#taskbuttons').show();
+			
+			updateAttendees(a);
+		}
+	);
+}
+
 function sendStatus(s)
 {
 	socket.emit('task-status', { attendeeid: attendeeid, status: s });
@@ -121,18 +130,18 @@ function updateAttendees(msg) {
 	else
 	{
 		$.each(msg, function(aid, data) {
-		var $s = $('<span>', {
-			class: 'glyphicon glyphicon-user'
-		});
+			var $s = $('<span>', {
+				class: 'glyphicon glyphicon-user'
+			});
 
-		var $d = $('<div>', {
-			id: 'attendee-' + aid,
-			text: (data.firstName + ' ' + data.lastInitial + '.'),
-			class: 'alert ' + data.status
-		});
+			var $d = $('<div>', {
+				id: 'attendee-' + aid,
+				text: (data.firstName + ' ' + data.lastInitial + '.'),
+				class: 'alert ' + data.status
+			});
 
-		$d.prepend($s);
-		$('#attendees-list').append($d);
+			$d.prepend($s);
+			$('#attendees-list').append($d);
 		});
 	}
 }
