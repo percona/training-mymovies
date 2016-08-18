@@ -10,54 +10,57 @@
   
     <div class="col-md-8">
     
-	  <form action="">
-	  
-	    <div class="row">
-		  <div id="tasks" class="col-md-12">
-			  <div class="panel panel-primary">
-				<div class="panel-heading"><h3 class="panel-title">Current Task</h3></div>
-				<div class="panel-body" id="current-task">No Task at This Time.</div>
-			  </div>
-		  </div>
-		</div>
-		
-		<div class="row">
-		  <div class="col-md-4">
-            <input id="task" autocomplete="off" />
-            <input type="checkbox" id="saveTask" />Save Task
+    <form action="">
+    
+      <div class="row">
+        <div id="tasks" class="col-md-12">
+          <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">Current Task</h3></div>
+            <div class="panel-body" id="current-task">No Task at This Time.</div>
           </div>
+        </div>
+      </div>
+    
+      <div class="row">
+        <div class="col-md-4">
+          <input id="task" autocomplete="off" />
+          <input type="checkbox" id="saveTask" />Save Task
+        </div>
   
-		  <div id="instructor-buttons" class="col-md-8">
-		    <button type="button" id="push-new-task" class="btn btn-success">Push Task</button>
-			<button type="button" id="clear-task" class="btn btn-success">Clear Task</button>
-		  </div>
-		  <div id="task-buttons" style="display: none;"></div>
-		</div>
-		
-		<div class="row">
-		  <div class="col-md-12">
-		    <div class="panel panel-primary">
-			  <div class="panel-heading"><h3 class="panel-title">Saved Tasks</h3></div>
-			  <div class="panel-body">
-				<ul>
-				{{#each tasks}}
-				  <li>{{taskId}} - {{taskText}}</li>
-				{{/each}}
-				</ul>
-			  </div>
-			</div>
-		  </div>
-		</div>
-	
-	  </form>
+        <div id="instructor-buttons" class="col-md-8">
+          <button type="button" id="push-new-task" class="btn btn-success">Push Task</button>
+          <button type="button" id="clear-task" class="btn btn-success">Clear Task</button>
+        </div>
+        <div id="task-buttons" style="display: none;"></div>
+      </div>
+    
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">Saved Tasks</h3></div>
+            <div class="panel-body" id="saved-tasks">
+
+            {{#each tasks}}
+              <div class="alert">
+                <span class="glyphicon glyphicon-share" id="task-{{taskId}}" onClick="pushTask({{taskId}});"></span>
+                {{taskText}}
+              </div>
+            {{/each}}
+
+            </div>
+          </div>
+        </div>
+      </div>
+  
+    </form>
     
     </div>
     
     <div class="col-md-4">
-	  <div class="panel panel-primary">
-		<div class="panel-heading"><h3 class="panel-title">Attendees</h3></div>
-		<div class="panel-body" id="attendees-list">None</div>
-	  </div>
+      <div class="panel panel-primary">
+        <div class="panel-heading"><h3 class="panel-title">Attendees</h3></div>
+        <div class="panel-body" id="attendees-list">None</div>
+      </div>
     </div>
     
   </div>
@@ -68,10 +71,10 @@
     var instructorid = '{{user.id}}';
     
     // Join the instructor channel
-	socket.on('connect', function() {
-		socket.emit('instructor-joined', { id: instructorid }, function(msg) {
-			updateAttendees(msg);
-		});
-	});
+    socket.on('connect', function() {
+        socket.emit('instructor-joined', { id: instructorid }, function(msg, savedTasks) {
+            updateAttendees(msg);
+        });
+    });
   </script>
-    
+  
