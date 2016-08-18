@@ -1,6 +1,6 @@
 var sqlite3 = require('sqlite3');
 
-var db = new sqlite3.Database('buzzr.db');
+var db = new sqlite3.cached.Database('buzzr.db');
 
 db.serialize(function() {
 	

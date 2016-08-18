@@ -41,9 +41,6 @@ module.exports = function(server) {
 			// join instructors room. could be more than 1 instructor.
 			socket.join('instructor');
 			
-			console.log("Joined Instructor Room");
-			console.log("Attendees List: " + util.inspect(attendees));
-			
 			// Once instructor has joined, broadcast list of attendees to other instructors
 			socket.broadcast.to('instructor').emit('update-attendees', attendees);
 			
@@ -81,25 +78,47 @@ module.exports = function(server) {
 			console.log('Instructor - ' + msg.id);
 			console.log('           - New Task:  ' + msg.taskText);
 			console.log('           - Save Task: ' + msg.saveTask);
-			
-			// Save it locally
-			currentTask = msg.taskText;
-			
-			// Save to database if requested
-			if (msg.saveTask)
-			{
-				db.run("INSERT INTO savedTasks (googleid, taskText, sorder) VALUES "
-					+ "('" + msg.id + "', '" + msg.taskText + "', 1)");
-			}
+			console.log('           - Task ID:   ' + msg.savedTaskId);
 			
 			// Clear attendee statuses
 			clearAttendeeStatuses();
 			
-			// Send to everyone
-			socket.broadcast.emit('new-task', msg.taskText);
-			
-			// Return task and updated attendees list back to instructor
-			cb(msg, attendees);
+			// If savedTaskId > 0, do db lookup
+			if (msg.savedTaskId > 0)
+			{
+				db.get("SELECT * FROM savedTasks WHERE taskId = ?",
+					msg.savedTaskId,
+					function(err, row) {
+						
+						// Save it locally for reconnects
+						currentTask = row.taskText;
+						
+						// Send to everyone
+						socket.broadcast.emit('new-task', row.taskText);
+						
+						// Return task and updated attendees list back to instructor
+						cb({ taskText: row.taskText }, attendees);
+					}
+				);
+			}
+			else
+			{
+				// Save to database if requested
+				if (msg.saveTask)
+				{
+					db.run("INSERT INTO savedTasks (googleid, taskText, sorder) VALUES "
+						+ "('" + msg.id + "', '" + msg.taskText + "', 1)");
+				}
+				
+				// Save it locally for reconnects
+				currentTask = msg.taskText;
+				
+				// Send to everyone
+				socket.broadcast.emit('new-task', msg.taskText);
+				
+				// Return task and updated attendees list back to instructor
+				cb(msg, attendees);
+			}
 		});
 		
 		// Instructor sends clear to all
