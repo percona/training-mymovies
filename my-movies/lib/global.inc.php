@@ -13,6 +13,7 @@ include "instrumentation.php";
 Instrumentation::get_instance()->start_request(true);
 
 $conn = MySQLi_perf::mysqli_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE);
+$conn->set_charset("utf8");
 
 if (isset($_SESSION['user_id']))
 {
