@@ -15,7 +15,7 @@ process.on('message', function(teams)
             function(callback)
             {
                 var start = new Date();
-                var req = http.get('http://' + _team.ip + '/my-movies/', function(res) {
+                var req = http.get('http://' + _team.privateip + '/my-movies/', function(res) {
                     resultData.homepageResult = new Date() - start;
                     callback(null, 'homepage');
                 });
@@ -30,7 +30,7 @@ process.on('message', function(teams)
             function(callback)
             {
                 var start = new Date();
-                var req = http.get('http://' + _team.ip + '/my-movies/search.php?search_type=movies&q=' + utils.genRandString(), function(res) {
+                var req = http.get('http://' + _team.privateip + '/my-movies/search.php?search_type=movies&q=' + utils.genRandString(), function(res) {
                     resultData.searchResult = new Date() - start;
                     callback(null, 'searchpage');
                 });
@@ -45,7 +45,7 @@ process.on('message', function(teams)
             function(callback)
             {
                 var start = new Date();
-                var req = http.get('http://' + _team.ip + '/my-movies/movie.php?id=' + utils.getRandomInt(0, 100000),  function(res) {
+                var req = http.get('http://' + _team.privateip + '/my-movies/movie.php?id=' + utils.getRandomInt(0, 100000),  function(res) {
                     resultData.movieResult = new Date() - start;
                     callback(null, 'moviepage');
                 });

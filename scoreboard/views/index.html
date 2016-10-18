@@ -27,7 +27,7 @@
       <tbody>
         {{#each theteams}}
         <tr>
-          <td>Team {{ name }}<br/>{{ ip }}</td>
+          <td><a href="http://{{ publicip }}/my-movies/">Team {{ name }}</a><br/>{{ privateip }}</td>
           <td>{{ prettyTime homepageResult }} {{{ printBar homepageResult 200 }}}</td>
           <td>{{ prettyTime searchResult }} {{{ printBar searchResult 1000 }}}</td>
           <td>{{ prettyTime movieResult }} {{{ printBar movieResult 500 }}}</td>

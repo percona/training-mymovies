@@ -9,11 +9,12 @@ var utils = require("./lib/utils");
 var fs = require("fs");
 
 // Team object
-var Team = function(name, ip)
+var Team = function(name, privIp, pubIp)
 {
     var that = {};
     that.name = name;
-    that.ip = ip;
+    that.privateip = privIp;
+    that.publicip = pubIp;
     that.homepageResult = 0;
     that.searchResult = 0;
     that.movieResult = 0;
@@ -25,7 +26,7 @@ var Team = function(name, ip)
 teams = Array();
 var tmpteams = JSON.parse(fs.readFileSync("teams.json"));
 for (var k in tmpteams) {
-  teams.push(new Team(k, tmpteams[k]));
+  teams.push(new Team(k, tmpteams[k].privateIp, tmpteams[k].publicIp));
 }
 
 // Enter here
