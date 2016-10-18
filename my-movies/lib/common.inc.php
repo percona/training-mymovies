@@ -121,14 +121,16 @@ function h($text)
 
 function create_new_user($first_name, $last_name, $email)
 {
+	global $conn
+	
 	mysql_query_wrapper(sprintf("INSERT INTO users (first_name, last_name, email_address)
 		VALUES ('%s', '%s', '%s')",
-		mysql_real_escape_string($first_name),
-		mysql_real_escape_string($last_name),
-		mysql_real_escape_string($email)
+		$conn->escape_string($first_name),
+		$conn->escape_string($last_name),
+		$conn->escape_string($email)
 	));
 	
-	return mysql_insert_id();
+	return $conn->insert_id;
 }
 
 function mysql_query_wrapper($query)
