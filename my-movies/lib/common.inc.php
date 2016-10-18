@@ -121,7 +121,7 @@ function h($text)
 
 function create_new_user($first_name, $last_name, $email)
 {
-	global $conn
+	global $conn;
 	
 	mysql_query_wrapper(sprintf("INSERT INTO users (first_name, last_name, email_address)
 		VALUES ('%s', '%s', '%s')",
