@@ -189,10 +189,16 @@ class user
 		}
 	}
 	
-	function add_comment($type='movie', $type_id, $comment)
+	function add_comment($type = 'movie', $type_id, $comment)
 	{
-		mysql_query_wrapper("INSERT INTO comments (user_id, type, type_id, comment_time, comment) VALUES
-			($this->id, '$type', '$type_id', NOW(), '".mysql_real_escape_string($comment)."')");
+		global $conn;
+		
+		mysql_query_wrapper(sprintf("INSERT INTO comments (user_id, type, type_id, comment_time, comment) VALUES (%d, '%s', %d,	NOW(), '%s')",
+			$this->id,
+                        $type,
+                        $type_id,
+                        $conn->escape_string($comment)
+  	  	));
 	}
 }
 
