@@ -1,26 +1,58 @@
 <?php
+
 include "../lib/global.inc.php";
 
 if (!empty($_POST))
 {
-	$_SESSION['user_id'] = create_new_user($_POST['first_name'], $_POST['last_name'], $_POST['email_address']);
+	$_SESSION['user_id'] = create_new_user($_POST['first_name'], $_POST['last_name'], $_POST['email']);
 	redirect_to("home.php");
 }
 
-print start_template();
+start_template();
 
 ?>
 
-<h2>Create a new account</h2>
+<div class="row">
+  <div class="col-lg-6">
+    <div class="well">
+      <form method="POST" action="<?php echo $_SERVER['PHP_SELF']?>" class="form-horizontal">
+      <fieldset>
+        <legend>Create New User</legend>
 
-<form method="POST" action="<?php echo $_SERVER['PHP_SELF']?>">
+        <div class="form-group">
+          <label for="firstName" class="col-lg-3 control-label">First Name</label>
+          <div class="col-lg-9">
+            <input type="text" class="form-control" id="firstName" name="first_name" />
+          </div>
+        </div>
 
-First Name: <input type="text" name="first_name" /><br />
-Last Name: <input type="text" name="last_name" /><br />
-Email Address: <input type="text" name="email_address" /><br />
-<br />
-<input type="submit" value="Create Account" />
+        <div class="form-group">
+          <label for="lastName" class="col-lg-3 control-label">Last Name</label>
+          <div class="col-lg-9">
+            <input type="text" class="form-control" id="lastName" name="last_name" />
+          </div>
+        </div>
 
-</form>
+        <div class="form-group">
+          <label for="email" class="col-lg-3 control-label">Email</label>
+          <div class="col-lg-9">
+            <input type="text" class="form-control" id="email" name="email" />
+          </div>
+        </div>
 
-<?php print end_template(); ?>
+        <div class="form-group">
+          <div class="col-lg-9 col-lg-offset-3">
+            <input type="submit" class="btn btn-primary" value="Create Account" />
+          </div>
+        </div>
+
+      </fieldset>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<?php
+end_template();
+?>

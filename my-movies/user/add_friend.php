@@ -1,4 +1,5 @@
 <?php
+
 include "../lib/global.inc.php";
 
 require_valid_user();

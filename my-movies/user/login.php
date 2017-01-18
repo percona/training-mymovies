@@ -28,18 +28,38 @@ start_template();
 
 ?>
 
-<h2>Sign is as an existing user</h2>
+<div class="row">
+  <div class="col-lg-5">
+    <div class="well">
+      <form method="POST" action="<?php echo $_SERVER['PHP_SELF']?>" class="form-horizontal">
+      <fieldset>
+        <legend>Sign In</legend>
 
-<form method="POST" action="<?php echo $_SERVER['PHP_SELF']?>">
+        <div class="form-group">
+          <label for="email" class="col-lg-2 control-label">Email</label>
+          <div class="col-lg-10">
+            <input type="text" name="email_address" class="form-control" id="email">
+          </div>
+        </div>
 
-Email Address: <input type='text' name='email_address'><br />
+        <div class="form-group">
+          <div class="col-lg-10 col-lg-offset-2">
+            <input type="submit" class="btn btn-primary" value="Login"/>
+          </div>
+        </div>
 
-<input type="submit" value="Login" />
-</form>
+        <div class="row">
+          <div class="col-lg-10 col-lg-offset-2">
+            <a href="<?php echo $_SERVER['PHP_SELF']?>?login=yes">login as random user</a>
+          </div>
+        </div>
 
-<br />
-<br />
+      </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
 
-<a id="random_login" href="<?php echo $_SERVER['PHP_SELF']?>?login=yes">login as random user</a>
-
-<?php end_template(); ?>
+<?php
+end_template();
+?>
