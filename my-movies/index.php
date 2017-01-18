@@ -5,90 +5,137 @@ start_template();
 
 ?>
 
-<p>There are <?php echo get_number_of_users(); ?> users, <?php echo get_number_of_movies(); ?> movies
-and <?php echo get_number_of_actors(); ?> actors in the system.</p>
+<div class="row">
+  <div class="col-lg-12">
+    <p>There are <?= number_format(get_number_of_users()); ?> users, <?= number_format(get_number_of_movies()); ?> movies and <?= number_format(get_number_of_actors()); ?> actors in the system.</p>
+  </div>
+</div>
 
-<div class="box" id="random_movie">
-	<h3>Random Movie</h3>
-	<?php 
+<div class="row">
+  <div class="col-lg-12"">
+
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">Random Movie</div>
+          <div class="panel-body">
+<?php
 	$movie = get_random_movie();
 	$movie = new movie($movie['id']);
-	?>
-	<a id='random_movie_1' href="movie.php?id=<?php echo $movie->id?>"><?php echo h($movie->title)?></a> (<?php echo $movie->production_year?>)
-</div>
-
-<div class="box" id="comments">
-	<h3>Latest comments</h3>
-
-<?php 
-$i=0;
-foreach(get_comments() as $comment) {
-	$i++;
-
-	$user = new user($comment['user_id']);
-	$movie = new movie($comment['type_id']);
-	print "<a id='comments_$i' href=\"".$user->link()."\">$user->email_address</a> commented on <a id='movie_comment_$i' href='".$movie->link()."'>".$movie->title."</a><br />";
-
-}
-
+	print str_repeat(" ", 10) . "<p><a href=\"movie.php?id=$movie->id\">".h($movie->title)."</a> ($movie->production_year)</p>\n";
 ?>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">Latest Comments</div>
+          <div class="panel-body">
+<?php
+	$comments = get_comments();
+	if (empty($comments))
+	{
+		print "<p><em>No Comments</em></p>\n";
+	}
+	else
+	{
+		foreach($comments as $comment)
+		{
+			$user = new user($comment['user_id']);
+			$movie = new movie($comment['type_id']);
+			print str_repeat(" ", 10) . "<p><a href=\"".$user->link()."\">$user->email_address</a> commented on <a href='".$movie->link()."'>".$movie->title."</a></p>\n";
+		}
+	}
+?>
+          </div>
+        </div>
+      </div>      
+    </div>
 
-</div>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">Online Right Now</div>
+          <div class="panel-body">
+<?php
+	$users = get_users_online();
+	if (empty($users))
+	{
+		print str_repeat(" ", 10) . "<p><em>Nobody Online</em></p>\n";
+	}
+	else
+	{
+		foreach(get_users_online() as $user_id)
+		{
+			$user = new user($user_id);
+			print str_repeat(" ", 10) . "<p><a href='".$user->link()."' title=\"$user->email_address\">$user->email_address</a></p>\n";
+		}
+	}
+?>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<div class="box" id="featured_users">
-	<h3>Featured User</h3>
-	<?php
-
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">Featured User</div>
+          <div class="panel-body">
+<?php
 	$user = get_random_user();
 	$user = new user($user['id']);
-	print "<a id='featured_users_1' href='".$user->link()."' title=\"$user->email_address\">$user->email_address</a><br />";
-
-	?>
-	
-</div>
-
-<div class="box" id="online_now">
-
-<h3>Online right now</h3>
-<?php 
-$i=0;
-foreach(get_users_online() as $user_id) {
-	$i++;
-	$user = new user($user_id);
-	print "<a id='online_now_$i' href='".$user->link()."' title=\"$user->email_address\">$user->email_address</a><br />";
-
-}
-
+	print str_repeat(" ", 10) . "<p><a href='".$user->link()."' title=\"$user->email_address\">$user->email_address</a></p>\n";
 ?>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
 
-<div class="box" id="recently_viewed">
+<div class="row">
+  <div class="col-lg-6">
 
-<h3>Being viewed right now</h3>
-<ul>
+    <div class="panel panel-default">
+      <div class="panel-heading">Being Viewed Right Now</div>
+      <div class="panel-body">
+        <ul>
 <?php
-$i=0;
-foreach(get_being_viewed() as $item) {
-$i++;
-
-	switch($item['type']) {
-		case 'movie':
-			$movie = new movie($item['viewed_id']);
-			print "<li><a id='recently_viewed_$i' href=\"movie.php?id=$movie->id\">". h($movie->title) . "</a> ($movie->production_year)</li>\n";
-		break;
-		case 'actor':
-			$actor = new actor($item['viewed_id']);
-			print "<li><a id='recently_viewed_$i' href=\"actor.php?id=$actor->id\">". h($actor->name) . "</a></li>\n";
-		break;
-		default:
-			print "<li><i>unsure</i></li>";
-		break;
+	$viewed = get_being_viewed();
+	if (empty($viewed))
+	{
+		print "<p><em>Nothing Being Viewed</em></p>\n";
 	}
-
-}
+	else
+	{
+		foreach(get_being_viewed() as $item)
+		{
+                        switch($item['type'])
+                        {
+                               	case 'movie':
+                                        $movie = new movie($item['viewed_id']);
+                                       	print str_repeat(" ", 10) . "<li><a href=\"movie.php?id=$movie->id\">". h($movie->title) . "</a> ($movie->production_year)</li>\n";
+                                       	break;
+                                case 'actor':
+                                       	$actor = new actor($item['viewed_id']);
+                                       	print str_repeat(" ", 10) . "<li><a href=\"actor.php?id=$actor->id\">". h($actor->name) . "</a></li>\n";
+                                       	break;
+                               	default:
+                                       	print str_repeat(" ", 10) . "<li><em>Unsure</em></li>\n";
+                                       	break;
+                        }
+                }
+        }
 ?>
-</ul>
+        </ul>
+      </div>
+    </div>
 
+  </div>
 </div>
 
-<?php end_template(); ?>
+<?php
+end_template();
+?>

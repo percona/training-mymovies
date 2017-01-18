@@ -7,24 +7,39 @@ $user = new user($_GET['id']);
 
 ?>
 
-<h2>User Information</h2>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading"><h2>User Information</h2></div>
+      <div class="panel-body">
 
-Name: <?php echo $user->first_name?> <?php echo $user->last_name?><br />
-Last Login Date: <?php echo $user->last_login_date?><br />
-Email: <?php echo $user->email_address?><br />
-<br />
+        <div class="col-lg-6">
+          <p><strong>Name:</strong> <?= $user->first_name ?> <?= $user->last_name?></p>
+          <p><strong>Last Login Date:</strong> <?= $user->last_login_date?></p>
+          <p><strong>Email:</strong> <?= $user->email_address?></p>
+        </div>
 
-<h3>Friends [<a id="add_friend" href="user/add_friend.php?id=<?php echo $user->id?>">+</a>]</h3>
+        <div class="col-lg-6">
+          <div class="panel panel-default">
+            <div class="panel-heading"><h4>Friends [<a href="user/add_friend.php?id=<?= $user->id?>">+</a>]</h4></div>
+            <div class="panel-body">
+<?php
+	foreach($user->friends() as $friend_id)
+	{
+		$friend = new user($friend_id);
+		print str_repeat(" ", 14) . "<p><a href=\"".$friend->link()."\">$friend->email_address</a></p>\n";
+	}
+?>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div><!-- row -->
 
 <?php
-$i = 0;
-foreach($user->friends() as $friend_id)
-{
-	$i++;
-	$friend = new user($friend_id);
-	print "<a id='friend_$i' href=\"".$friend->link()."\">$friend->email_address</a><br />";
-}
-
 end_template();
-
 ?>
