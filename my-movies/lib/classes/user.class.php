@@ -28,6 +28,11 @@ class user
 		}
 	}
 	
+	function get_display_name()
+	{
+		return sprintf("%s %s", $this->first_name, $this->last_name);
+	}
+	
 	function update_last_login_date()
 	{
 		mysql_query_wrapper("UPDATE users SET last_login_date = NOW() WHERE id = $this->id");
@@ -168,10 +173,7 @@ class user
 	
 	function add_rating($id, $vote)
 	{
-		/*
-		 Are you profiling?  This may or may not be a hidden
-	 	 easter egg for you to fix.
-		*/
+		// Are you profiling?  This may or may not be a hidden easter egg for you to fix.
 		sleep(2);
 	
 		mysql_query_wrapper(sprintf("INSERT INTO movie_ratings (user_id, movie_id, rating)
@@ -180,8 +182,7 @@ class user
 	
 	function add_friend($id)
 	{
-		/* Friendship is mutually exclusive, and 
-		   granted automatically for usability. */
+		// Friendship is mutually exclusive, and granted automatically for usability.
 		
 		if (!in_array($id, $this->friends()))
 		{
@@ -195,10 +196,10 @@ class user
 		
 		mysql_query_wrapper(sprintf("INSERT INTO comments (user_id, type, type_id, comment_time, comment) VALUES (%d, '%s', %d,	NOW(), '%s')",
 			$this->id,
-                        $type,
-                        $type_id,
-                        $conn->escape_string($comment)
-  	  	));
+			$type,
+			$type_id,
+			mysqli_real_escape_string($conn, $comment)
+		));
 	}
 }
 

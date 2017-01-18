@@ -26,14 +26,14 @@ function get_number_of_actors()
 
 function get_random_movie()
 {
-	$result = mysql_query_wrapper("SELECT * FROM title WHERE title != '' AND kind_id = 1 ORDER BY RAND() LIMIT 1");
+	$result = mysql_query_wrapper("SELECT * FROM title WHERE title != '' AND kind_id = 1 LIMIT 1");
 	
 	return $result->fetch_assoc();
 }
 
 function get_random_actor()
 {
-	$result = mysql_query_wrapper("SELECT * FROM name ORDER BY RAND() LIMIT 1");
+	$result = mysql_query_wrapper("SELECT * FROM name LIMIT 1");
 	
 	return $result->fetch_assoc();
 }
@@ -125,9 +125,9 @@ function create_new_user($first_name, $last_name, $email)
 	
 	mysql_query_wrapper(sprintf("INSERT INTO users (first_name, last_name, email_address)
 		VALUES ('%s', '%s', '%s')",
-		$conn->escape_string($first_name),
-		$conn->escape_string($last_name),
-		$conn->escape_string($email)
+		mysqli_real_escape_string($conn, $first_name),
+		mysqli_real_escape_string($conn, $last_name),
+		mysqli_real_escape_string($conn, $email)
 	));
 	
 	return $conn->insert_id;
