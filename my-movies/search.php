@@ -11,7 +11,7 @@ $search_type = $_GET['search_type'];
 <div class="row">
   <div class="col-lg-12">
     <div class="panel panel-default">
-      <div class="panel-heading"><h2>Returning Search Results for "<?php echo h($_GET['q'])?>"</h2></div>
+      <div class="panel-heading"><h2>Returning Search Results for "<?= h($_GET['q'])?>"</h2></div>
       <div class="panel-body">
 <?php 
 	if ($search_type == 'movies')

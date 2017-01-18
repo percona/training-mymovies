@@ -15,7 +15,7 @@ start_template();
 <div class="row">
   <div class="col-lg-6">
     <div class="well">
-      <form method="POST" action="<?php echo $_SERVER['PHP_SELF']?>" class="form-horizontal">
+      <form method="POST" action="<?= $_SERVER['PHP_SELF']?>" class="form-horizontal">
       <fieldset>
         <legend>Create New User</legend>
 

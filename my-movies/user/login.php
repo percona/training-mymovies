@@ -31,7 +31,7 @@ start_template();
 <div class="row">
   <div class="col-lg-5">
     <div class="well">
-      <form method="POST" action="<?php echo $_SERVER['PHP_SELF']?>" class="form-horizontal">
+      <form method="POST" action="<?= $_SERVER['PHP_SELF']?>" class="form-horizontal">
       <fieldset>
         <legend>Sign In</legend>
 
@@ -50,7 +50,7 @@ start_template();
 
         <div class="row">
           <div class="col-lg-10 col-lg-offset-2">
-            <a href="<?php echo $_SERVER['PHP_SELF']?>?login=yes">login as random user</a>
+            <a href="<?= $_SERVER['PHP_SELF']?>?login=yes">login as random user</a>
           </div>
         </div>
 

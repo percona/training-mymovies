@@ -13,17 +13,17 @@ $movie->update_info();
   <div class="col-lg-12">
     <div class="bs-component">
       <div class="panel panel-default">
-        <div class="panel-heading"><h2><?php echo $movie->title?> (<?php echo $movie->production_year?>)</h2></div>
+        <div class="panel-heading"><h2><?= $movie->title?> (<?= $movie->production_year?>)</h2></div>
         <div class="panel-body">
 
           <div class="row">
 
             <div class="col-lg-4">
-              <p><strong>Runtime:</strong> <?php echo $movie->info[1][0]?> minutes</p>
-              <p><strong>Genre:</strong> <?php echo $movie->info[3][0]?></p>
-              <p><strong>Language(s):</strong> <?php echo $movie->info[4][0]?></p>
-              <p><strong>Gross:</strong> <?php echo $movie->info[107][0]?></p>
-              <p><strong>Rating:</strong> <?php echo $movie->info[97][0]?></p>
+              <p><strong>Runtime:</strong> <?= $movie->info[1][0]?> minutes</p>
+              <p><strong>Genre:</strong> <?= $movie->info[3][0]?></p>
+              <p><strong>Language(s):</strong> <?= $movie->info[4][0]?></p>
+              <p><strong>Gross:</strong> <?= $movie->info[107][0]?></p>
+              <p><strong>Rating:</strong> <?= $movie->info[97][0]?></p>
               <p><strong>Average Score:</strong> <?php if (!$movie->average_score()) { echo "<i>Not enough votes</i>"; } else { echo $movie->average_score(); } ?></p>
             </div>
 
@@ -74,7 +74,7 @@ $movie->update_info();
 
           <div class="row col-lg-12">
             <div class="panel panel-default">
-              <div class="panel-heading"><h4>Comments <a href="user/comment.php?id=<?php echo $movie->id?>&type=movie">[+]</a></h4></div>
+              <div class="panel-heading"><h4>Comments <a href="user/comment.php?id=<?= $movie->id?>&type=movie">[+]</a></h4></div>
               <div class="panel-body">
 <?php
 		$comments = $movie->comments();
