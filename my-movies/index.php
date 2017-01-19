@@ -17,7 +17,7 @@ start_template();
     <div class="row">
       <div class="col-lg-6">
         <div class="panel panel-default">
-          <div class="panel-heading">Random Movie</div>
+          <div class="panel-heading">Featured Movie</div>
           <div class="panel-body">
 <?php
 	$movie = get_random_movie();
