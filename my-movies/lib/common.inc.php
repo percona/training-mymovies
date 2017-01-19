@@ -26,14 +26,14 @@ function get_number_of_actors()
 
 function get_random_movie()
 {
-	$result = mysql_query_wrapper("SELECT * FROM title WHERE title != '' AND kind_id = 1 LIMIT 1");
+	$result = mysql_query_wrapper("SELECT * FROM title WHERE title != '' AND kind_id = 1 ORDER BY RAND() LIMIT 1");
 	
 	return $result->fetch_assoc();
 }
 
 function get_random_actor()
 {
-	$result = mysql_query_wrapper("SELECT * FROM name LIMIT 1");
+	$result = mysql_query_wrapper("SELECT * FROM name ORDER BY RAND() LIMIT 1");
 	
 	return $result->fetch_assoc();
 }
