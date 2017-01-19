@@ -101,15 +101,15 @@ start_template();
     <div class="panel panel-default">
       <div class="panel-heading">Being Viewed Right Now</div>
       <div class="panel-body">
-        <ul>
 <?php
 	$viewed = get_being_viewed();
 	if (empty($viewed))
 	{
-		print "<p><em>Nothing Being Viewed</em></p>\n";
+		print str_repeat(" ", 8) . "<p><em>Nothing Being Viewed</em></p>\n";
 	}
 	else
 	{
+		print str_repeat(" ", 8) . "<ul>\n";
 		foreach(get_being_viewed() as $item)
 		{
                         switch($item['type'])
@@ -127,9 +127,9 @@ start_template();
                                        	break;
                         }
                 }
+		print str_repeat(" ", 8) . "</ul>\n";
         }
 ?>
-        </ul>
       </div>
     </div>
 
