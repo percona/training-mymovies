@@ -84,7 +84,7 @@ hbs.registerHelper('printBar', function(time, goal) {
 		if (time > goal)
 			html = utils.util.format(template, 'warning', time, time, pct);
 		else
-			html = utils.util.format(template, 'success', time, time, pct);
+			html = utils.util.format(template, 'success', time, time, 5);
 	}
 	
 	return html;
