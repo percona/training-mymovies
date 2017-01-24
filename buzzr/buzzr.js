@@ -63,7 +63,7 @@ app.use(passport.session());
 var routes = require('./routes')(app, passport);
 
 // Get the port and start 'er up
-+var port = process.env.npm_package_config_port;
+var port = process.env.npm_package_config_port;
 var server = app.listen(port, function() {
 	console.log("Lisening on " + port);
 }).on('error', function(err) {
