@@ -68,8 +68,8 @@ process.on('message', function(teams)
             // Let the parent know something changed
             process.send(resultData);
             
-            // Refresh results in 45 seconds
-            setTimeout(function() { gatherData(_team); }, 45000);
+            // Refresh results in 15 seconds
+            setTimeout(function() { gatherData(_team); }, 15000);
         });
     }
     
