@@ -1,0 +1,45 @@
+  <div class="row">
+  
+    <div class="col-md-6 tcenter">
+      <img src="/images/percona_training_logo.png" />
+    </div>
+    
+    <div class="row">
+	  <div class="col-md-6 tcenter">
+		<p class="lead">Welcome attendee! Please provide some contact information to help us identify you throughout the presentation.</p>
+	  </div>
+	  
+	  <div class="col-md-6">
+		<form action="/attendee/login" method="post">
+		  <div class="form-group">
+			<label for="firstName1">First Name <span class="small">*</span></label>
+			<input type="text" class="form-control" name="firstName1" id="firstName1" placeholder="First Name" value="{{formvals.firstName1}}">
+		  </div>
+		  <div class="form-group">
+			<label for="lastInitial1">Last Initial <span class="small">*</span></label>
+			<input type="text" class="form-control" name="lastInitial1" id="lastInitial1" placeholder="Last Initial" maxlength="1">
+		  </div>
+		  <div class="form-group">
+			<label for="email1">Email Address <span class="small">(optional)</span></label>
+			<input type="email" class="form-control" name="email1" id="email1" placeholder="Email">
+		  </div>
+		  <p class="small">* required</p>
+		  
+		  {{#if flash}}
+			{{#each flash.error}}
+		  <div class="alert alert-danger" role="alert">
+			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+			<span class="sr-only">Error:</span>{{this.msg}}
+		  </div>
+			{{/each}}
+		  {{/if}}
+		  
+		  <button type="submit" class="btn btn-default">Join Us!</button>
+		  
+        </form>
+      </div>
+      
+    </div>
+    
+  </div>
+  

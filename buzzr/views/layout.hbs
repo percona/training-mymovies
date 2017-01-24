@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Buzzr!</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+          integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <link href="/css/buzzr.css" rel="stylesheet">
+    <script src="http://code.jquery.com/jquery-1.12.2.min.js"
+            integrity="sha256-lZFHibXzMHo3GGeehn1hudTAP3Sc0uKXBXAzHX1sjtk="
+            crossorigin="anonymous"></script>
+  </head>
+  <body role="document">
+    
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header navbar-brand"><em>Buzzr!</em></div>
+      </div>
+    </nav>
+    
+    <div class="container">
+    
+    {{{body}}}
+    
+    <footer class="footer">
+      <p>&copy; 2016</p>
+      
+      {{#if user}}
+      <div class="pull-right"><a href="/logout">Logout</a></div>
+      {{/if}}
+      
+    </footer>
+    
+    </div>
+    
+  </body>
+</html>

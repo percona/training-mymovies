@@ -1,0 +1,46 @@
+  
+  <div class="row">
+  
+    <div class="col-md-6 tcenter">
+      <img src="/images/percona_training_logo.png" />
+    </div>
+    
+    <div class="col-md-6 tcenter">
+      
+      <div class="row">
+          <p class="lead">Welcome! Please choose an option below:</p>
+      </div>
+
+      {{#if flash}}
+        {{#each flash.success}}
+      <div class="alert alert-success" role="alert">
+        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+        <span class="sr-only">Success:</span>{{this}}
+      </div>
+        {{/each}}
+
+        {{#each flash.error}}
+      <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>{{this}}
+      </div>
+        {{/each}}
+      {{/if}}
+      
+      <div class="row">
+      
+          <div class="col-xs-6" style="text-align: center;">
+            <p><a href="/instructor"><img src="images/whiteboard.png" style="width: 75px;" /></a></p>
+            <h4>Speaker</h4>
+          </div>
+
+          <div class="col-xs-6" style="text-align: center;">
+            <p><a href="/attendee"><img src="images/attendee.png" style="width: 75px;" /></a></p>
+            <h4>Attendee</h4>
+          </div>
+          
+      </div>
+      
+    </div>
+    
+  </div>
