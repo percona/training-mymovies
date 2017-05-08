@@ -461,6 +461,10 @@ class MySQLi_perf extends MySQLi
 		Instrumentation::get_instance()->timer();;
 		
 		$r = mysqli_connect($host, $user, $pass, $db, $port, $socket);
+		if (!$r)
+		{
+			die('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
+		}
 		
 		Instrumentation::get_instance()->increment('mysql_connection_count');
 		Instrumentation::get_instance()->increment('mysql_connect_time', Instrumentation::get_instance()->timer());
