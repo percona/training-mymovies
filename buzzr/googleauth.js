@@ -14,7 +14,7 @@ module.exports = function(passport) {
 	passport.use(new GoogleStrategy({
 			clientID: '768833376258-ma64kjcma4pq09ga0p2r73nlphufktoi.apps.googleusercontent.com',
 			clientSecret: 'AdESMo-xNZAMMXK-lKus3KuB',
-			callbackURL: "http://127.0.0.1:3000/instructor/oauth"
+			callbackURL: "http://buzzr.duckdns.org/instructor/oauth"
 		},
 		function(token, refreshToken, gprofile, done) {
 			
