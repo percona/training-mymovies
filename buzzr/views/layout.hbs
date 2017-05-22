@@ -12,26 +12,22 @@
   </head>
   <body role="document">
     
-    <nav class="navbar navbar-default navbar-static-top">
-      <div class="container">
-        <div class="navbar-header navbar-brand"><em>Buzzr!</em></div>
-      </div>
-    </nav>
-    
     <div class="container">
     
     {{{body}}}
-    
-      <div class="footer">
-        <p>&copy; 2017</p>
 
-        {{#if user}}
-        <div class="pull-right"><a href="/logout">Logout</a></div>
-        {{/if}}
-
+      <div class="row">
+        <div class="col-sm-12" id="footer">
+          <div class="col-sm-3">Buzzr! &copy; 2017</div>
+          <div class="col-sm-9">
+            {{#if user}}
+            <div class="pull-right"><a href="/logout" onClick="properLogout=true; return true;">Logout</a></div>
+            {{/if}}
+          </div>
+        </div>
       </div>
-    
+
     </div>
-    
+
   </body>
 </html>

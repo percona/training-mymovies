@@ -106,8 +106,7 @@ module.exports = function(server) {
 				// Save to database if requested
 				if (msg.saveTask)
 				{
-					db.run("INSERT INTO savedTasks (googleid, taskText, sorder) VALUES "
-						+ "('" + msg.id + "', '" + msg.taskText + "', 1)");
+					db.run("INSERT INTO savedTasks (googleid, taskText, sorder) VALUES (?, ?, 1)", msg.id, msg.taskText);
 				}
 				
 				// Save it locally for reconnects

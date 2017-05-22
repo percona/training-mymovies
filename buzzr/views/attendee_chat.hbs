@@ -1,39 +1,71 @@
 
-    <h2>Hi, {{firstName}} {{lastInitial}}.</h2>
-    <p class="small">Tasks and polls will appear here when appropriate. Please keep this window open.</p>
-    <ul id="messages"></ul>
-    <form action="">
+  <div class="row">
+    <div class="col-sm-2"><img src="https://www.gravatar.com/avatar/{{emailHash}}?d=wavatar" style="height: 80px; width: 80px;" /></div>
+    <div class="col-sm-3"><h2>Hi, {{firstName}} {{lastInitial}}.</h2></div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <span class="small">Tasks and polls will appear here when appropriate. Please keep this window open.</span>
+      <ul id="messages"></ul>
+    </div>
+  </div>
+
+  <form action="">
+  
+  <div class="row">
+    <div class="col-sm-12">
+  
+      <div class="row">
+        <div class="col-sm-12">
+
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Current Task</h3>
+            </div>
+            <div class="panel-body" id="current-task">No Task at This Time.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div id="task-buttons" style="display: none;">
+            <button type="button" id="completed-task" class="btn btn-success">Completed Task!</button>
+            <button type="button" id="just-a-min" class="btn btn-warning">Just another minute!</button>
+            <button type="button" id="ack-help" class="btn btn-danger">Ack! Help!</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <input type="checkbox" id="turn-off-notifications" /> Disable Notifications
+    </div>
+  </div>
+
+  </form>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/notify.js"></script>
+  <script src="/js/buzzr.js"></script>
+  <script>
+    var attendeeid = '{{attendeeid}}';
+    var firstName = '{{firstName}}';
+    var lastInitial = '{{lastInitial}}';
       
-      <div id="tasks">
-		<div class="panel panel-primary">
-		  <div class="panel-heading">
-			<h3 class="panel-title">Current Task</h3>
-		  </div>
-		  <div class="panel-body" id="current-task">No Task at This Time.</div>
-		</div>
-	  
-		<div id="task-buttons" style="display: none;">
-		  <button type="button" id="completed-task" class="btn btn-success">Completed Task!</button>
-		  <button type="button" id="just-a-min" class="btn btn-warning">Just another minute!</button>
-		  <button type="button" id="ack-help" class="btn btn-danger">Ack! Help!</button>
-		</div>
-	  </div>
-    
-    </form>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/js/buzzr.js"></script>
-    <script>
-      var attendeeid = '{{attendeeid}}';
-      var firstName = '{{firstName}}';
-      var lastInitial = '{{lastInitial}}';
-            
-      // Announce we've connected to the room
-      socket.on('connect', function() {
-      	socket.emit('attendee-joined', {
-      		attendeeid: attendeeid,
-      		firstName: firstName,
-      		lastInitial: lastInitial
-      	});
-      });
-    </script>
-    <audio id="audiotag1" src="audio/i-demand-attention.mp3" preload="auto"></audio>
+    // Announce we've connected to the room
+    socket.on('connect', function() {
+    socket.emit('attendee-joined', {
+      attendeeid: attendeeid,
+      firstName: firstName,
+      lastInitial: lastInitial
+    });
+    });
+  </script>
+  <audio id="audiotag1" src="audio/i-demand-attention.mp3" preload="auto"></audio>

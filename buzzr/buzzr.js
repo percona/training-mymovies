@@ -54,16 +54,21 @@ app.use(session({
 // For flash messages
 app.use(flash());
 
+// Get the port and start 'er up
+var port = process.env.npm_package_config_port;
+if (port == undefined) {
+  console.log("Port undefined. Try 'npm config set buzzr:port 8080'");
+  process.exit(1);
+}
+
 // Configure google auth stuff
-require('./googleauth.js')(passport);
+require('./googleauth.js')(passport, port);
 app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
 var routes = require('./routes')(app, passport);
 
-// Get the port and start 'er up
-var port = process.env.npm_package_config_port;
 var server = app.listen(port, function() {
 	console.log("Lisening on " + port);
 }).on('error', function(err) {

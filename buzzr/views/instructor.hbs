@@ -1,9 +1,11 @@
 
   <div class="row">
-    <div class="col-md-12">
-      <h2><img src="{{ user.pic }}" /> Hi, {{user.displayName}}.</h2>
-      <p class="small">Tasks and polls will appear here when appropriate. Please keep this window open.</p>
-    </div>
+    <div class="col-md-1"><img src="{{ user.pic }}" /></div>
+    <div class="col-md-11"><h2>Hi, {{user.displayName}}.</h2></div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-12"><p class="small">Tasks and polls will appear here when appropriate. Please keep this window open.</p></div>
   </div>
   
   <div class="row">
@@ -22,30 +24,38 @@
       </div>
     
       <div class="row">
-        <div class="col-md-4">
-          <input id="task" autocomplete="off" />
+        <div class="col-md-12">
+          <textarea id="task" autocomplete="off" rows="10" cols="60" class="col-md-12"/></textarea>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
           <input type="checkbox" id="saveTask" />Save Task
         </div>
-  
-        <div id="instructor-buttons" class="col-md-8">
-          <button type="button" id="push-new-task" class="btn btn-success">Push Task</button>
-          <button type="button" id="clear-task" class="btn btn-success">Clear Task</button>
-        </div>
-        <div id="task-buttons" style="display: none;"></div>
       </div>
-    
+
+      <div class="row">
+        <div class="col-md-12">
+          <div id="instructor-buttons">
+            <button type="button" id="push-new-task" class="btn btn-success">Push Task</button>
+            <button type="button" id="clear-task" class="btn btn-success">Clear Task</button>
+          </div>
+          <div id="task-buttons" style="display: none;"></div>
+        </div>
+      </div>
+
       <div class="row">
         <div class="col-md-12">
           <div class="panel panel-primary">
             <div class="panel-heading"><h3 class="panel-title">Saved Tasks</h3></div>
-            <div class="panel-body" id="saved-tasks">
+            <div class="panel-body">
 
-            {{#each tasks}}
-              <div class="alert">
-                <span class="glyphicon glyphicon-share" id="task-{{taskId}}" onClick="pushTask({{taskId}});"></span>
-                {{taskText}}
+              <div class="list-group" id="saved-tasks">
+              {{#each tasks}}
+                  <button type="button" class="list-group-item saved-task" id="task-{{taskId}}" onClick="pushTask({{taskId}}); return false;">{{taskText}}</button>
+              {{/each}}
               </div>
-            {{/each}}
 
             </div>
           </div>

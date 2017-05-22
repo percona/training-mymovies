@@ -1,4 +1,5 @@
 var socket = io('/buzzur');
+var properLogout = false;
 
 // Clear the current task from everyone
 $('#clear-task').click(function(e) {
@@ -46,7 +47,11 @@ socket.on('new-task', function(taskText) {
 	{
 		$('#current-task').html(taskText);
 		$('#task-buttons').show();
-		$('#audiotag1')[0].play();
+
+		if ($('#audiotag1').length)
+			$('#audiotag1')[0].play();
+		
+		doNotification();
 	}
 });
 
@@ -75,11 +80,13 @@ socket.on('update-task-status', function(msg) {
 });
 
 // Warn before navigating away
+/*
 $(window).bind('beforeunload', function(e) {
-	var msg = 'Please keep this window open to participate in exercises and polls.';
-	e.returnValue = msg;
-	return msg;
+	if (properLogout)
+		return 'Please keep this window open to participate in exercises and polls.';
+	return false;
 });
+*/
 
 // HELPERS ===================================
 
@@ -144,4 +151,34 @@ function updateAttendees(msg) {
 			$('#attendees-list').append($d);
 		});
 	}
+}
+
+function doNotification()
+{
+	// Check that library has loaded
+	if (typeof Notify != 'function')
+		return;
+	
+	// Do we have permission and not disabled?
+	if (!Notify.needsPermission && ! $('#turn-off-notifications').prop('checked'))
+	{
+		var myNotification = new Notify('New Task Added!', {
+			body: 'A new task was added. Check the Buzzr! window for details.'
+		});
+		myNotification.show();
+	}
+	else if (Notify.isSupported())
+	{
+		Notify.requestPermission(onPermissionGranted, onPermissionDenied);
+	}
+}
+
+function onPermissionGranted()
+{
+	console.log('Permission has been granted by the user');
+}
+
+function onPermissionDenied()
+{
+	console.warn('Permission has been denied by the user');
 }

@@ -3,18 +3,12 @@ html {
   min-height: 100%;
 }
 
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-}
+body { }
 
-div.footer {
-  position: fixed;
-  bottom: 10px;
-  height: 20px;
-  width: 730px;
-  color: #777;
-  border-top: 1px solid #e5e5e5;
+div#footer {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-top: 1px solid #aaa;
 }
 
 .navbar-brand {
@@ -32,7 +26,7 @@ div.footer {
 }
 
 .container {
-  width: 730px;
+  margin-top: 30px;
 }
 
 .container-narrow > hr {
@@ -63,13 +57,23 @@ div.footer {
   text-align: center;
 }
 
-#saved-tasks > .alert,
 #attendees-list > .alert {
   padding: 2px;
   margin-bottom: 8px;
 }
 
-#saved-tasks > .alert > .glyphicon,
 #attendees-list > .alert > .glyphicon {
   padding-right: 10px;
+}
+
+#instructor-buttons {
+  margin-bottom: 10px;
+}
+
+button.saved-task, div#current-task {
+  white-space: pre-line;
+}
+
+div#task-buttons {
+  padding-bottom: 10px;
 }

@@ -1,4 +1,5 @@
 var util = require('util');
+var crypto = require('crypto');
 
 module.exports = function(app, passport, db) {
 	
@@ -22,7 +23,9 @@ module.exports = function(app, passport, db) {
 		res.render('attendee_chat', {
 			firstName: req.session.firstName,
 			lastInitial: req.session.lastInitial,
-			attendeeid: req.session.attendeeid
+			attendeeid: req.session.attendeeid,
+			emailHash: req.session.emailHash,
+			user: req.session.attendeeid
 		});
 		
 	});
@@ -61,6 +64,7 @@ module.exports = function(app, passport, db) {
 			req.session.firstName = req.body.firstName1;
 			req.session.lastInitial = req.body.lastInitial1;
 			req.session.email = (req.body.email1 || "anon@anon.org");
+			req.session.emailHash = (crypto.createHash('md5').update(req.body.email1.toLowerCase()).digest('hex'));
 			req.session.attendeeid = (req.body.firstName1.toUpperCase()
 									+ req.body.lastInitial1.toUpperCase()
 									+ (Math.floor(Date.now() / 1000)));
