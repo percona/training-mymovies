@@ -34,7 +34,7 @@
           <div id="task-buttons" style="display: none;">
             <button type="button" id="completed-task" class="btn btn-success">Completed Task!</button>
             <button type="button" id="just-a-min" class="btn btn-warning">Just another minute!</button>
-            <button type="button" id="ack-help" class="btn btn-danger">Ack! Help!</button>
+            <button type="button" id="ack-help" class="btn btn-danger">Eeek! Help!</button>
           </div>
         </div>
       </div>
@@ -61,11 +61,14 @@
       
     // Announce we've connected to the room
     socket.on('connect', function() {
-    socket.emit('attendee-joined', {
-      attendeeid: attendeeid,
-      firstName: firstName,
-      lastInitial: lastInitial
-    });
+      socket.emit('attendee-joined', {
+        attendeeid: attendeeid,
+        firstName: firstName,
+        lastInitial: lastInitial
+      },
+      function(profile) {
+        $('#turn-off-notifications').prop('checked', !profile.notifications);
+      });
     });
   </script>
   <audio id="audiotag1" src="audio/i-demand-attention.mp3" preload="auto"></audio>

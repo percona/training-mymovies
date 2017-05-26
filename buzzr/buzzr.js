@@ -37,7 +37,7 @@ app.use(validator([]));
 app.use(express.static(__dirname + '/public'));
 
 // Parse/Use cookies
-app.use(session({
+var sessionMiddleware = session({
 	name: 'percona-buzzr',
 	cookie: {
 		expires: new Date(Date.now() + (5 * 24 * 3600 * 1000))
@@ -49,7 +49,10 @@ app.use(session({
 		table: 'sessions',
 		db: 'buzzr'
 	})
-}));
+});
+
+// For express
+app.use(sessionMiddleware);
 
 // For flash messages
 app.use(flash());
@@ -79,7 +82,7 @@ var server = app.listen(port, function() {
 });
 
 // Chat stuff
-var chat = require('./chat')(server);
+var chat = require('./chat')(server, sessionMiddleware);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,9 +1,12 @@
 var util = require('util');
 
-module.exports = function(server) {
-	
+module.exports = function(server, sessionMiddleware) {
+
 	// Get the socket
 	var io = require('socket.io').listen(server);
+	io.use(function(socket, next) {
+        	sessionMiddleware(socket.request, socket.request.res, next);
+	});
 	
 	// Get the database
 	var db = require('./db');
@@ -18,7 +21,7 @@ module.exports = function(server) {
 	var nsp = io.of('/buzzur');
 	nsp.on('connection', function(socket) {
 		
-		console.log('User Connected');
+		console.log('User Connected: ' + util.inspect(socket.request.session));
 		
 		// Attendee and instructor, on connection, get the currentTask
 		socket.emit('new-task', currentTask);
@@ -48,8 +51,8 @@ module.exports = function(server) {
 			cb(attendees)
 		});
 		
-		// Attendee joined. Broadcast to instructors room.
-		socket.on('attendee-joined', function(msg) {
+		// Attendee joined. Broadcast to instructors room. Return attendee's profile.
+		socket.on('attendee-joined', function(msg, cb) {
 			console.log('Attendee Joined: ' + util.inspect(msg));
 			
 			// socket-session variable
@@ -60,14 +63,32 @@ module.exports = function(server) {
 			
 			// Broadcast updated attendees list to all instructors
 			socket.broadcast.to('instructor').emit('update-attendees', attendees);
+			
+			// Return profile to attendee
+			if (cb)
+				cb(socket.request.session);
 		});
 		
+		// Attendee updated preference
+		socket.on('save-profile', function(msg) {
+			console.log('Attendee Saved Profile: ' + util.inspect(msg));
+			msg.forEach(function(e) {
+				socket.request.session[e.name] = e.value;
+			});
+			socket.request.session.save();
+		});
+
 		// Received a status click from attendee
 		socket.on('task-status', function(msg) {
 			console.log('Attendee (' + msg.attendeeid + ') Status: ' + msg.status);
 			
 			// Update attendee status
-			attendees[socket.attendeeid].status = msg.status;
+			if (attendees[socket.attendeeid])
+				attendees[socket.attendeeid].status = msg.status;
+			else
+			{
+				console.log('Socket-AttendeeID: ' + socket.attendeeid + ' does not exist.');
+			}
 			
 			// Send task status to instructors
 			socket.broadcast.to('instructor').emit('update-task-status', msg);
@@ -121,7 +142,7 @@ module.exports = function(server) {
 		});
 		
 		// Instructor sends clear to all
-		socket.on('instructor-clear-task', function(msg, cb) {
+		socket.on('instructor-clear-task', function(data, cb) {
 			console.log('Instructor - Clear Task');
 			
 			// Clear local cache
@@ -134,7 +155,7 @@ module.exports = function(server) {
 			socket.broadcast.emit('clear-task');
 			
 			// Return updated attendees list via callback
-			cb(msg, attendees);
+			cb(attendees);
 		});
 	
 	});

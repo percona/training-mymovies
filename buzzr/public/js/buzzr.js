@@ -3,11 +3,8 @@ var properLogout = false;
 
 // Clear the current task from everyone
 $('#clear-task').click(function(e) {
-	
-	socket.emit('instructor-clear-task', {}, function(msg, a) {
-		
+	socket.emit('instructor-clear-task', {}, function(a) {
 		$('#current-task').html('No Task at This Time.');
-		
 		updateAttendees(a);
 	});
 });
@@ -37,6 +34,11 @@ $('#just-a-min').click(function(e){
 $('#ack-help').click(function(e){
 	clearAndSet('alert-danger');
 	sendStatus('alert-danger');
+});
+
+// Save disable notifications
+$('#turn-off-notifications').click(function(e){
+	socket.emit('save-profile', [{ name: 'notifications', value: !this.checked }]);
 });
 
 // Received new task
@@ -77,6 +79,12 @@ socket.on('update-task-status', function(msg) {
 	
 	// Update attendee status
 	$(dn).addClass(msg.status);
+
+	// Sort the list to put alert-success at the bottom
+	if (msg.status == 'alert-success') {
+		p = $(dn).detach();
+		$('#attendees-list').append(p);
+	}
 });
 
 // Warn before navigating away
@@ -144,7 +152,7 @@ function updateAttendees(msg) {
 			var $d = $('<div>', {
 				id: 'attendee-' + aid,
 				text: (data.firstName + ' ' + data.lastInitial + '.'),
-				class: 'alert ' + data.status
+				class: 'alert ' + (data.status || '')
 			});
 
 			$d.prepend($s);

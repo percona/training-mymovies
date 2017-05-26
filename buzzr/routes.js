@@ -68,6 +68,7 @@ module.exports = function(app, passport, db) {
 			req.session.attendeeid = (req.body.firstName1.toUpperCase()
 									+ req.body.lastInitial1.toUpperCase()
 									+ (Math.floor(Date.now() / 1000)));
+			req.session.notifications = true;
 			
 			// send to chat area
 			return res.redirect('/attendee');
