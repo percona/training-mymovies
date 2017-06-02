@@ -5,6 +5,10 @@ html {
 
 body { }
 
+div.row {
+ /* border: 1px solid black; */
+}
+
 div#footer {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -66,14 +70,27 @@ div#footer {
   padding-right: 10px;
 }
 
-#instructor-buttons {
-  margin-bottom: 10px;
+#instructor-buttons, #save-task-box {
+  margin: 10px 0 10px 0;
 }
 
-button.saved-task, div#current-task {
+#saveTask {
+  margin-right: 5px;
+}
+
+button.saved-task, span#current-task {
   white-space: pre-line;
 }
 
 div#task-buttons {
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px solid #aaa;
+}
+
+div.task-history-item {
+  padding-top: 10px;
   padding-bottom: 10px;
+  border-bottom: 1px solid #aaa;
+  white-space: pre-line;
 }
