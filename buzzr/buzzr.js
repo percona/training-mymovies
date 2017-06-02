@@ -34,7 +34,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(validator([]));
 
 // Static Content (js, css, imgs)
-app.use(express.static(__dirname + '/public'));
+app.use('/js', express.static(__dirname + '/public/js'));
+app.use('/js', express.static(__dirname + '/node_modules/jquery/dist'));
+app.use('/js', express.static(__dirname + '/node_modules/notifyjs/dist'));
+app.use('/js', express.static(__dirname + '/node_modules/bootstrap-toggle/js'));
+
+app.use('/css', express.static(__dirname + '/public/css'));
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap-toggle/css'));
+
+app.use('/images', express.static(__dirname + '/public/images'));
+app.use('/audio', express.static(__dirname + '/public/audio'));
+app.use('/fonts', express.static(__dirname + '/node_modules/bootstrap/dist/fonts'));
 
 // Parse/Use cookies
 var sessionMiddleware = session({
