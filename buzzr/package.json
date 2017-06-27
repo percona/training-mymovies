@@ -7,7 +7,7 @@
   "private": true,
   "description": "Buzzr is a notification/buzzer web-app for Percona training classrooms.",
   "scripts": {
-    "start": "nodejs buzzr",
+    "start": "node buzzr",
     "prestart": "./update_dns.sh"
   },
   "repository": {
