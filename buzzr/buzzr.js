@@ -34,10 +34,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(validator([]));
 
 // Static Content (js, css, imgs)
-app.use(express.static(__dirname + '/public'));
+app.use('/js', express.static(__dirname + '/public/js'));
+app.use('/js', express.static(__dirname + '/node_modules/jquery/dist'));
+app.use('/js', express.static(__dirname + '/node_modules/notifyjs/dist'));
+app.use('/js', express.static(__dirname + '/node_modules/bootstrap-toggle/js'));
+
+app.use('/css', express.static(__dirname + '/public/css'));
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap-toggle/css'));
+
+app.use('/images', express.static(__dirname + '/public/images'));
+app.use('/audio', express.static(__dirname + '/public/audio'));
+app.use('/fonts', express.static(__dirname + '/node_modules/bootstrap/dist/fonts'));
 
 // Parse/Use cookies
-app.use(session({
+var sessionMiddleware = session({
 	name: 'percona-buzzr',
 	cookie: {
 		expires: new Date(Date.now() + (5 * 24 * 3600 * 1000))
@@ -49,7 +60,10 @@ app.use(session({
 		table: 'sessions',
 		db: 'buzzr'
 	})
-}));
+});
+
+// For express
+app.use(sessionMiddleware);
 
 // For flash messages
 app.use(flash());
@@ -79,7 +93,7 @@ var server = app.listen(port, function() {
 });
 
 // Chat stuff
-var chat = require('./chat')(server);
+var chat = require('./chat')(server, sessionMiddleware);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

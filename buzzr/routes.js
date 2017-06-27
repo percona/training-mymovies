@@ -1,7 +1,7 @@
 var util = require('util');
 var crypto = require('crypto');
 
-module.exports = function(app, passport, db) {
+module.exports = function(app, passport) {
 	
 	// Get the database
 	var db = require('./db');
@@ -15,17 +15,16 @@ module.exports = function(app, passport, db) {
 	app.get('/attendee', function(req, res, next) {
 		
 		// Check for session cookie
-		if (typeof req.session.attendeeid === 'undefined') {
+		if (typeof req.session.attendee === 'undefined' || typeof req.session.attendee.id === 'undefined') {
 			return res.redirect('/attendee/login');
 		}
 		
 		// logged in with identifier
+		var attendee = req.session.attendee;
 		res.render('attendee_chat', {
-			firstName: req.session.firstName,
-			lastInitial: req.session.lastInitial,
-			attendeeid: req.session.attendeeid,
-			emailHash: req.session.emailHash,
-			user: req.session.attendeeid
+			firstName: attendee.firstName,
+			lastInitial: attendee.lastInitial,
+			emailHash: attendee.emailHash
 		});
 		
 	});
@@ -60,14 +59,20 @@ module.exports = function(app, passport, db) {
 		
 		if (!errors)
 		{
-			// Save stuff to session
-			req.session.firstName = req.body.firstName1;
-			req.session.lastInitial = req.body.lastInitial1;
-			req.session.email = (req.body.email1 || "anon@anon.org");
-			req.session.emailHash = (crypto.createHash('md5').update(req.body.email1.toLowerCase()).digest('hex'));
-			req.session.attendeeid = (req.body.firstName1.toUpperCase()
+			// Create attendee object and save to session
+			var attendee = {
+				firstName: req.body.firstName1,
+				lastInitial: req.body.lastInitial1,
+				email: (req.body.email1 || "anon@anon.org"),
+				emailHash: (crypto.createHash('md5').update(req.body.email1.toLowerCase()).digest('hex')),
+				id: (req.body.firstName1.toUpperCase()
 									+ req.body.lastInitial1.toUpperCase()
-									+ (Math.floor(Date.now() / 1000)));
+									+ (Math.floor(Date.now() / 1000))),
+				notifications: true,
+				status: 0,
+				isAfk: false
+			};
+			req.session.attendee = attendee;
 			
 			// send to chat area
 			return res.redirect('/attendee');
