@@ -92,6 +92,7 @@ hbs.registerHelper('printBar', function(time, goal) {
 
 // Just serve this static content (js, css)
 app.use(express.static(__dirname + '/static'));
+app.use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'))
 
 // There's only 1 route here
 app.get('/', function (req, res) {

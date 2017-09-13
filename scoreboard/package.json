@@ -8,8 +8,9 @@
   "author": "Matthew Boehm <matthew.boehm@percona.com>",
   "license": "MIT",
   "dependencies": {
+    "async": "~1.5.2",
     "express": "^4.13.4",
     "hbs": "^4.0.0",
-    "async": "~1.5.2"
+    "jquery": "^3.2.1"
   }
 }

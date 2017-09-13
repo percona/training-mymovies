@@ -1,10 +1,34 @@
 <html>
   <head>
-  <title>MyMovies Scoreboard</title>
-  <link href="/css/bootstrap/bootstrap-3.3.6.min.css" rel="stylesheet">
-  <link href="/css/bootstrap/bootstrap-theme-3.3.6.min.css" rel="stylesheet">
-  <link href="/css/scoreboard.css" rel="stylesheet">
-  <meta http-equiv="refresh" content="60">
+    <title>MyMovies Scoreboard</title>
+    <link href="/css/bootstrap/bootstrap-3.3.6.min.css" rel="stylesheet">
+    <link href="/css/bootstrap/bootstrap-theme-3.3.6.min.css" rel="stylesheet">
+    <link href="/css/scoreboard.css" rel="stylesheet">
+    
+    <script src="/jquery/jquery.slim.js"></script>
+    <script type="text/javascript">
+    
+    var timeout = 60
+    function updateProgress(t) {
+    
+        pct = Math.round((t / timeout) * 100)
+    
+        $('#reloadprogressbar').css('width', pct + "%");
+        $('#reloadprogressbar').text(t + "s");
+
+        // console.log("fired updateProgress: " + pct)
+        t--
+        
+        if (t > 0)
+            setTimeout(function() { updateProgress(t); }, 1000);
+        else
+            location.reload();
+    }
+    
+    $(document).ready(function() {
+        updateProgress(60);
+    });
+    </script>
   </head>
   <body role="document">
     
@@ -14,32 +38,46 @@
       </div>
     </nav>
     
-    <div class="col-md-12">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th class="col-md-1">Team name</th>
-          <th class="col-md-3">Homepage (Goal: <200ms)</th>
-          <th class="col-md-3">Search Results (Goal: < 1000ms)</th>
-          <th class="col-md-3">Movie page (Goal: <500ms)</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each theteams}}
-        <tr>
-          <td><a href="http://{{ publicip }}/my-movies/">Team {{ name }}</a><br/>{{ privateip }}</td>
-          <td>{{ prettyTime homepageResult }} {{{ printBar homepageResult 200 }}}</td>
-          <td>{{ prettyTime searchResult }} {{{ printBar searchResult 1000 }}}</td>
-          <td>{{ prettyTime movieResult }} {{{ printBar movieResult 500 }}}</td>
-        </tr>
-        {{/each}}
-      </tbody>
-    </table>
+    <div class="container">
+      <div class="row">
+         <div class="col-md-12">
+         <table class="table table-striped">
+           <thead>
+             <tr>
+               <th class="col-md-1">Team name</th>
+               <th class="col-md-3">Homepage (Goal: <200ms)</th>
+               <th class="col-md-3">Search Results (Goal: < 1000ms)</th>
+               <th class="col-md-3">Movie page (Goal: <500ms)</th>
+             </tr>
+           </thead>
+           <tbody>
+             {{#each theteams}}
+             <tr>
+               <td><a href="http://{{ publicip }}/my-movies/">Team {{ name }}</a><br/>{{ privateip }}</td>
+               <td>{{ prettyTime homepageResult }} {{{ printBar homepageResult 200 }}}</td>
+               <td>{{ prettyTime searchResult }} {{{ printBar searchResult 1000 }}}</td>
+               <td>{{ prettyTime movieResult }} {{{ printBar movieResult 500 }}}</td>
+             </tr>
+             {{/each}}
+           </tbody>
+         </table>
+         </div>
+      </div>
     </div>
-    
+
     <footer class="footer">
       <div class="container">
-        <p class="text-muted">Page last updated at {{ date }}.</p>
+        <div class="row">
+          <div class="col-md-1"><span class="text-muted">Refresh in: </span></div>
+          <div class="col-md-11">
+            <div class="progress reloadprogressbar">
+              <div id="reloadprogressbar" class="progress-bar progress-bar-info" style="width: 100%;">60s</div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12"><span class="text-muted">Page last updated at {{ date }}.</span></div>
+        </div>
       </div>
     </footer>
     
