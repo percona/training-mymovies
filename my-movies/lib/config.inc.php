@@ -7,7 +7,7 @@ define('MYSQL_USER', 'imdb');
 define('MYSQL_DATABASE', 'imdb');
 define('MYSQL_PASSWORD', 'imdb');
 
-define('DEBUG_MODE', true);
+define('DEBUG_MODE', false);
 
 error_reporting(E_ALL ^ E_NOTICE);
 
