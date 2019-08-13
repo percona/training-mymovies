@@ -245,7 +245,7 @@ class Instrumentation
 	/* Add PHP stack information to a query along with the
 	 * unique id for the request and the session id.
 	 */
-	public function instrument_query($query_sql = "", $deadlock_count = 0, $keys = array('request_id', 'session_id', 'SESSION_uname'))
+	public function instrument_query($query_sql = "", $deadlock_count = 0)
 	{
 		$query_header = "";
 		
@@ -255,23 +255,12 @@ class Instrumentation
 			$tmp = debug_backtrace(); // supress php notice by creating a tmp var first.
 			$frame = array_pop($tmp);
 			$file  = basename($frame['file']);
-			$query_header = "-- File: {$file}\tLine: {$frame['line']}\tFunction: {$frame['function']}\t";
-			
-			foreach($keys as $x => $key)
-			{
-				$val = $this->get($key);
-				if($val)
-				{
-					$val = str_replace(array("\t","\n","\0"), "", $val); /* all other chars are safe in comments */ 
-					$key = strtolower(str_replace(array(": ","\t","\n","\0"), "", $key)); 
-					$query_header .= "\t{$key}: {$val}";
-				}
-			}
+			$query_header = "/* File:{$file} Line:{$frame['line']} Func:{$frame['function']} */";
 		}
 		
 		if($this->debug) echo "<pre>$query_header\n$query_sql;</pre>";
 		
-		return trim($query_header) . "\n" . $query_sql;
+		return trim($query_header) . " " . $query_sql;
 	}
 	
 	/* This function is called from the 'config.php' script to
