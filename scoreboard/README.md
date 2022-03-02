@@ -2,8 +2,8 @@
 
 ## Ansible-based Install
 
-1. Use ansible script from percona/training-material to deploy
-`ansible-playbook -i ansible_hosts_hou -l db1-T10 ansible_playbooks/scoreboard.yml`
+1. Use ansible script from percona/training-aws to deploy
+`ansible-playbook -i ansible_hosts_hou -l scoreboard-T0 hosts.yml`
 
 ## Manual Install
 
